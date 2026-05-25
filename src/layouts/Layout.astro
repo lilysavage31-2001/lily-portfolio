@@ -1,0 +1,228 @@
+---
+interface Props {
+  title?: string;
+}
+const { title = "Lily Savage" } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@1,300;1,400&family=Inter:wght@100;200;300&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <nav>
+      <a href="/" class="nav-logo">lily savage</a>
+      <div class="nav-links">
+        <a href="/work">work</a>
+        <a href="/about">about</a>
+        <a href="mailto:hello@lilysavage.com">contact</a>
+      </div>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <div class="footer-meta">
+        <span>graphic designer / art director / stylist</span>
+        <span>Wellington, NZ</span>
+      </div>
+      <div class="footer-name">Lily Savage</div>
+      <div class="footer-links">
+        <a href="#">EMAIL</a>
+        <a href="#">INSTA</a>
+        <a href="#">LINKEDIN</a>
+      </div>
+    </footer>
+
+    <div id="lightbox" aria-modal="true" role="dialog" aria-label="Image lightbox">
+      <img id="lightbox-img" src="" alt="" />
+    </div>
+
+    <script>
+      const lightbox = document.getElementById('lightbox')!;
+      const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+
+      function openLightbox(src: string, alt: string) {
+        lightboxImg.src = src;
+        lightboxImg.alt = alt;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll<HTMLImageElement>('img[data-lightbox]').forEach(img => {
+        img.addEventListener('click', () => openLightbox(img.src, img.alt));
+      });
+
+      lightbox.addEventListener('click', e => {
+        if (e.target !== lightboxImg) closeLightbox();
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeLightbox();
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 16px;
+    background: #FAFAFA;
+    color: #000000;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  a:hover {
+    opacity: 0.5;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 3rem;
+  }
+
+  .nav-logo {
+    font-size: 16px;
+    font-weight: 200;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  .nav-links a {
+    font-size: 16px;
+    font-weight: 200;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #F0F2EF;
+    padding: 2.5rem 3rem 2.5rem;
+    margin-top: auto;
+  }
+
+  .footer-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 200;
+    letter-spacing: 0.01em;
+    margin-bottom: 1rem;
+  }
+
+  .footer-name {
+    font-family: 'Cormorant Garant', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(5rem, 11vw, 10rem);
+    text-align: center;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 200;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── LIGHTBOX ── */
+  #lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FAFAFA;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  #lightbox.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  #lightbox-img {
+    max-width: 88vw;
+    max-height: 88vh;
+    object-fit: contain;
+    cursor: default;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav {
+      padding: 1.5rem;
+    }
+
+    .nav-links {
+      gap: 1.5rem;
+    }
+
+    footer {
+      padding: 2rem 1.5rem;
+    }
+
+    .footer-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      margin-bottom: 1rem;
+    }
+  }
+</style>

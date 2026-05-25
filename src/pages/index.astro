@@ -1,17 +1,52 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
 ---
+<Layout title="Lily Savage">
+  <section class="hero">
+    <div class="hero-images">
+      <img src="https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679328/12_hree3m.jpg" alt="Portfolio image one" data-lightbox />
+      <img src="https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679326/122_wl1sg0.jpg" alt="Portfolio image two" data-lightbox />
+    </div>
+  </section>
+</Layout>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<style>
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 3rem 5rem;
+  }
+
+  .hero-images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    width: 88%;
+    max-width: 1200px;
+  }
+
+  .hero-images img {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 2.5rem 1.5rem 3rem;
+    }
+
+    .hero-images {
+      grid-template-columns: 1fr;
+      width: 100%;
+      gap: 1rem;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .hero-images {
+      width: 94%;
+    }
+  }
+</style>

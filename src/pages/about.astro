@@ -1,0 +1,142 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="About — Lily Savage">
+  <section class="about">
+
+    <h1 class="about-name">Lily Savage</h1>
+
+    <div class="about-intro">
+      <div class="about-portrait">
+        <img src="https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679316/Sabrina_Socials-16_ozjkug.jpg" alt="Lily Savage" />
+      </div>
+      <div class="about-bio">
+        <p>
+          Lily Savage is a creative director, graphic designer, and stylist based in Wellington, New Zealand. With over a decade of experience across fashion, editorial, and brand, she brings a considered and refined aesthetic to every project she touches.
+        </p>
+        <p>
+          Her work spans art direction, visual identity, campaign styling, and print design — always rooted in a deep understanding of image-making and the quiet spaces between things. She collaborates closely with photographers, brands, and makers to create work that is intentional and lasting.
+        </p>
+        <p>
+          Lily has worked with clients across New Zealand, Australia, and Europe, with a particular focus on fashion and lifestyle brands who value craft and restraint over noise.
+        </p>
+      </div>
+    </div>
+
+    <div class="about-extended">
+      <p>
+        Before establishing her independent practice, Lily spent several years working within the editorial fashion world in London, contributing to major publications and developing a visual language distinctly her own. She returned to New Zealand drawn by the particular quality of light, the slower pace, and the tight-knit community of makers she calls home.
+      </p>
+      <p>
+        She approaches each new brief with curiosity and rigour, and believes the best creative work comes from genuine partnership and trust built over time. She is drawn to clients who take the long view.
+      </p>
+    </div>
+
+    <p class="about-availability">
+      available for select bookings — contact:
+      <a href="mailto:hello@lilysavage.com">hello@lilysavage.com</a>
+    </p>
+
+  </section>
+</Layout>
+
+<style>
+  .about {
+    padding: 3.5rem 3rem 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .about-name {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 200;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 4rem;
+  }
+
+  .about-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+    margin-bottom: 5rem;
+  }
+
+  .about-portrait img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  .about-bio {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    padding-top: 0.25rem;
+  }
+
+  .about-bio p {
+    font-size: 15px;
+    font-weight: 200;
+    line-height: 1.85;
+    color: #000;
+  }
+
+  .about-extended {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    max-width: 680px;
+    margin-bottom: 4rem;
+  }
+
+  .about-extended p {
+    font-size: 15px;
+    font-weight: 200;
+    line-height: 1.85;
+  }
+
+  .about-availability {
+    font-size: 14px;
+    font-weight: 200;
+    letter-spacing: 0.02em;
+    color: #000;
+  }
+
+  .about-availability a {
+    border-bottom: 1px solid #000;
+    padding-bottom: 1px;
+  }
+
+  .about-availability a:hover {
+    opacity: 0.5;
+  }
+
+  @media (max-width: 768px) {
+    .about {
+      padding: 2.5rem 1.5rem 3.5rem;
+    }
+
+    .about-name {
+      margin-bottom: 2.5rem;
+    }
+
+    .about-intro {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .about-extended {
+      margin-bottom: 3rem;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .about-intro {
+      gap: 3rem;
+    }
+  }
+</style>
