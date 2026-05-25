@@ -1,27 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { fetchCloudinaryImages } from '../lib/cloudinary';
 
-const cloudinaryImages = [
-  "https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679328/12_hree3m.jpg",
-  "https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679326/122_wl1sg0.jpg",
-  "https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679316/Sabrina_Socials-16_ozjkug.jpg",
-  "https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679288/Sabrina_Socials-11_fowbss.jpg",
-  "https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679189/aa_zmhui1.jpg",
-  "https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779680373/mayacard_wbvn6y.jpg",
-];
-const images = Array.from({ length: 20 }, (_, i) => cloudinaryImages[i % 5]);
+const images = await fetchCloudinaryImages();
 ---
 <Layout title="Work — Lily Savage">
   <section class="work">
-    <div class="work-header">
-      <h1>all projects</h1>
-      <span class="rule">—</span>
-    </div>
-
     <div class="work-grid">
-      {images.map((src, i) => (
+      {images.map((img, i) => (
         <div class="grid-item">
-          <img src={src} alt={`Project ${i + 1}`} data-lightbox />
+          <img
+            src={img.secure_url}
+            alt={img.title || `Project ${i + 1}`}
+            data-lightbox
+            data-title={img.title}
+            data-description={img.description}
+          />
         </div>
       ))}
     </div>
@@ -35,35 +29,12 @@ const images = Array.from({ length: 20 }, (_, i) => cloudinaryImages[i % 5]);
     padding: 3.5rem 3rem 5rem;
   }
 
-  .work-header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-
-  h1 {
-    font-size: 16px;
-    font-weight: 200;
-    letter-spacing: 0.06em;
-    margin-bottom: 0.6rem;
-  }
-
-  .rule {
-    display: block;
-    font-size: 14px;
-    font-weight: 200;
-    opacity: 0.5;
-    letter-spacing: 0.1em;
-  }
-
   .work-grid {
-    columns: 5;
-    column-gap: 4px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    align-items: start;
     width: 100%;
-  }
-
-  .grid-item {
-    break-inside: avoid;
-    margin-bottom: 4px;
   }
 
   .grid-item img {
@@ -86,13 +57,13 @@ const images = Array.from({ length: 20 }, (_, i) => cloudinaryImages[i % 5]);
     }
 
     .work-grid {
-      columns: 3;
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
   @media (max-width: 480px) {
     .work-grid {
-      columns: 2;
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>

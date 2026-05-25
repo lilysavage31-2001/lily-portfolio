@@ -43,16 +43,28 @@ const { title = "Lily Savage" } = Astro.props;
     </footer>
 
     <div id="lightbox" aria-modal="true" role="dialog" aria-label="Image lightbox">
-      <img id="lightbox-img" src="" alt="" />
+      <div class="lightbox-content">
+        <img id="lightbox-img" src="" alt="" />
+        <div class="lightbox-caption" id="lightbox-caption">
+          <p id="lightbox-title"></p>
+          <p id="lightbox-description"></p>
+        </div>
+      </div>
     </div>
 
     <script>
       const lightbox = document.getElementById('lightbox')!;
       const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+      const lightboxCaption = document.getElementById('lightbox-caption')!;
+      const lightboxTitle = document.getElementById('lightbox-title')!;
+      const lightboxDescription = document.getElementById('lightbox-description')!;
 
-      function openLightbox(src: string, alt: string) {
+      function openLightbox(src: string, alt: string, title: string, description: string) {
         lightboxImg.src = src;
         lightboxImg.alt = alt;
+        lightboxTitle.textContent = title;
+        lightboxDescription.textContent = description;
+        lightboxCaption.hidden = !title && !description;
         lightbox.classList.add('open');
         document.body.style.overflow = 'hidden';
       }
@@ -63,11 +75,13 @@ const { title = "Lily Savage" } = Astro.props;
       }
 
       document.querySelectorAll<HTMLImageElement>('img[data-lightbox]').forEach(img => {
-        img.addEventListener('click', () => openLightbox(img.src, img.alt));
+        img.addEventListener('click', () =>
+          openLightbox(img.src, img.alt, img.dataset.title ?? '', img.dataset.description ?? '')
+        );
       });
 
       lightbox.addEventListener('click', e => {
-        if (e.target !== lightboxImg) closeLightbox();
+        if (e.target === lightbox) closeLightbox();
       });
 
       document.addEventListener('keydown', e => {
@@ -197,11 +211,38 @@ const { title = "Lily Savage" } = Astro.props;
     pointer-events: all;
   }
 
-  #lightbox-img {
+  .lightbox-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     max-width: 88vw;
-    max-height: 88vh;
+    max-height: 92vh;
+  }
+
+  #lightbox-img {
+    max-width: 100%;
+    max-height: 80vh;
     object-fit: contain;
     cursor: default;
+  }
+
+  .lightbox-caption {
+    margin-top: 1.25rem;
+    text-align: center;
+  }
+
+  #lightbox-title {
+    font-size: 14px;
+    font-weight: 200;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.35rem;
+  }
+
+  #lightbox-description {
+    font-size: 13px;
+    font-weight: 200;
+    opacity: 0.6;
+    letter-spacing: 0.02em;
   }
 
   /* ── RESPONSIVE ── */

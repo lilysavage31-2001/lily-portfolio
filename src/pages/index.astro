@@ -1,11 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { fetchCloudinaryImages } from '../lib/cloudinary';
+
+const allImages = await fetchCloudinaryImages();
+const heroImages = allImages.slice(0, 2);
 ---
 <Layout title="Lily Savage">
   <section class="hero">
     <div class="hero-images">
-      <img src="https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679328/12_hree3m.jpg" alt="Portfolio image one" data-lightbox />
-      <img src="https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679326/122_wl1sg0.jpg" alt="Portfolio image two" data-lightbox />
+      {heroImages.map((img, i) => (
+        <img
+          src={img.secure_url}
+          alt={img.title || `Portfolio image ${i + 1}`}
+          data-lightbox
+          data-title={img.title}
+          data-description={img.description}
+        />
+      ))}
     </div>
   </section>
 </Layout>
