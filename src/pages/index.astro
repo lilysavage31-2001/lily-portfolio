@@ -2,8 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import { fetchCloudinaryImages } from '../lib/cloudinary';
 
-const allImages = await fetchCloudinaryImages();
-const heroImages = allImages.slice(0, 2);
+let heroImages: Awaited<ReturnType<typeof fetchCloudinaryImages>> = [];
+try {
+  const allImages = await fetchCloudinaryImages();
+  heroImages = allImages.slice(0, 2);
+} catch (error) {
+  console.error('Failed to fetch Cloudinary images:', error);
+}
 ---
 <Layout title="Lily Savage">
   <section class="hero">

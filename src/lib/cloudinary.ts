@@ -1,5 +1,3 @@
-import { loadEnv } from 'vite';
-
 export interface CloudinaryImage {
   public_id: string;
   secure_url: string;
@@ -21,10 +19,13 @@ interface CloudinaryResource {
 }
 
 export async function fetchCloudinaryImages(): Promise<CloudinaryImage[]> {
-  const env = loadEnv('', process.cwd(), '');
-  const cloudName = env.CLOUDINARY_CLOUD_NAME;
-  const apiKey = env.CLOUDINARY_API_KEY;
-  const apiSecret = env.CLOUDINARY_API_SECRET;
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+  const apiKey = process.env.CLOUDINARY_API_KEY;
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+  if (!cloudName || !apiKey || !apiSecret) {
+    throw new Error('Missing Cloudinary environment variables');
+  }
 
   const params = new URLSearchParams({
     context: 'true',
