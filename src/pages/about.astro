@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { fetchAboutPortrait } from '../lib/cloudinary';
+
+let portrait: Awaited<ReturnType<typeof fetchAboutPortrait>> = null;
+try {
+  portrait = await fetchAboutPortrait();
+} catch (error) {
+  console.error('Failed to fetch about portrait:', error);
+}
 ---
 <Layout title="About — Lily Savage">
   <section class="about">
@@ -8,7 +16,7 @@ import Layout from '../layouts/Layout.astro';
 
     <div class="about-intro">
       <div class="about-portrait">
-        <img src="https://res.cloudinary.com/dmzxvx3in/image/upload/q_auto/f_auto/v1779679316/Sabrina_Socials-16_ozjkug.jpg" alt="Lily Savage" />
+        {portrait && <img src={portrait.secure_url} alt={portrait.title || 'Lily Savage'} />}
       </div>
       <div class="about-bio">
         <p>
