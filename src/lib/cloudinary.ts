@@ -30,7 +30,7 @@ async function fetchResources(
   auth: string,
   resourceType: 'image' | 'video'
 ): Promise<CloudinaryResource[]> {
-  const params = new URLSearchParams({ context: 'true', max_results: '500' });
+  const params = new URLSearchParams({ context: 'true', max_results: '500', prefix: 'portfolio/' });
   const response = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudName}/resources/${resourceType}?${params}`,
     { headers: { Authorization: auth } }
