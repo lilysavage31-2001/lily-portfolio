@@ -13,7 +13,7 @@ const { title = "Lily Savage" } = Astro.props;
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@1,300;1,400&family=Inter:wght@100;200;300&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap" rel="stylesheet" />
   </head>
   <body>
     <nav>
@@ -30,15 +30,13 @@ const { title = "Lily Savage" } = Astro.props;
     </main>
 
     <footer>
-      <div class="footer-meta">
-        <span>graphic designer / art director / stylist</span>
-        <span>Wellington, NZ</span>
+      <div class="footer-info">
+        <p>Lily Savage is a graphic designer / art director / stylist</p>
+        <p>Currently Based in New Zealand</p>
       </div>
-      <div class="footer-name">Lily Savage</div>
       <div class="footer-links">
-        <a href="#">EMAIL</a>
-        <a href="#">INSTA</a>
-        <a href="#">LINKEDIN</a>
+        <a href="mailto:hello@lilysavage.com">Email</a>
+        <a href="#">Instagram</a>
       </div>
     </footer>
 
@@ -188,37 +186,36 @@ const { title = "Lily Savage" } = Astro.props;
   /* ── FOOTER ── */
   footer {
     background: #F0F2EF;
-    padding: 2.5rem 3rem 2.5rem;
+    padding: 3rem;
     margin-top: auto;
-  }
-
-  .footer-meta {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 16px;
-    font-weight: 200;
-    letter-spacing: 0.01em;
-    margin-bottom: 1rem;
+    flex-direction: column;
+    gap: 2rem;
   }
 
-  .footer-name {
-    font-family: 'Cormorant Garant', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: clamp(5rem, 11vw, 10rem);
-    text-align: center;
-    line-height: 1;
-    letter-spacing: -0.01em;
-    margin-bottom: 1.5rem;
+  .footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .footer-info p {
+    font-size: 15px;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    line-height: 1.6;
   }
 
   .footer-links {
     display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-    font-weight: 200;
-    letter-spacing: 0.1em;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .footer-links a {
+    font-size: 15px;
+    font-weight: 100;
+    letter-spacing: 0.01em;
   }
 
   /* ── LIGHTBOX ── */
@@ -294,13 +291,6 @@ const { title = "Lily Savage" } = Astro.props;
 
     footer {
       padding: 2rem 1.5rem;
-    }
-
-    .footer-meta {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.25rem;
-      margin-bottom: 1rem;
     }
   }
 </style>
