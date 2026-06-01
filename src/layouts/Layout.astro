@@ -42,9 +42,10 @@ const { title = "Lily Savage" } = Astro.props;
       </div>
     </footer>
 
-    <div id="lightbox" aria-modal="true" role="dialog" aria-label="Image lightbox">
+    <div id="lightbox" aria-modal="true" role="dialog" aria-label="Media lightbox">
       <div class="lightbox-content">
         <img id="lightbox-img" src="" alt="" />
+        <video id="lightbox-video" muted loop playsinline></video>
         <div class="lightbox-caption" id="lightbox-caption">
           <p id="lightbox-title"></p>
           <p id="lightbox-description"></p>
@@ -55,13 +56,31 @@ const { title = "Lily Savage" } = Astro.props;
     <script>
       const lightbox = document.getElementById('lightbox')!;
       const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+      const lightboxVideo = document.getElementById('lightbox-video') as HTMLVideoElement;
       const lightboxCaption = document.getElementById('lightbox-caption')!;
       const lightboxTitle = document.getElementById('lightbox-title')!;
       const lightboxDescription = document.getElementById('lightbox-description')!;
 
-      function openLightbox(src: string, alt: string, title: string, description: string) {
+      function openLightboxImage(src: string, alt: string, title: string, description: string) {
+        lightboxVideo.pause();
+        lightboxVideo.src = '';
+        lightboxVideo.style.display = 'none';
         lightboxImg.src = src;
         lightboxImg.alt = alt;
+        lightboxImg.style.display = 'block';
+        lightboxTitle.textContent = title;
+        lightboxDescription.textContent = description;
+        lightboxCaption.hidden = !title && !description;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function openLightboxVideo(src: string, title: string, description: string) {
+        lightboxImg.src = '';
+        lightboxImg.style.display = 'none';
+        lightboxVideo.src = src;
+        lightboxVideo.style.display = 'block';
+        lightboxVideo.play();
         lightboxTitle.textContent = title;
         lightboxDescription.textContent = description;
         lightboxCaption.hidden = !title && !description;
@@ -72,11 +91,21 @@ const { title = "Lily Savage" } = Astro.props;
       function closeLightbox() {
         lightbox.classList.remove('open');
         document.body.style.overflow = '';
+        lightboxVideo.pause();
+        lightboxVideo.src = '';
+        lightboxVideo.style.display = 'none';
+        lightboxImg.style.display = 'block';
       }
 
       document.querySelectorAll<HTMLImageElement>('img[data-lightbox]').forEach(img => {
         img.addEventListener('click', () =>
-          openLightbox(img.src, img.alt, img.dataset.title ?? '', img.dataset.description ?? '')
+          openLightboxImage(img.src, img.alt, img.dataset.title ?? '', img.dataset.description ?? '')
+        );
+      });
+
+      document.querySelectorAll<HTMLVideoElement>('video[data-lightbox]').forEach(video => {
+        video.addEventListener('click', () =>
+          openLightboxVideo(video.src, video.dataset.title ?? '', video.dataset.description ?? '')
         );
       });
 
@@ -220,6 +249,14 @@ const { title = "Lily Savage" } = Astro.props;
   }
 
   #lightbox-img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    cursor: default;
+  }
+
+  #lightbox-video {
+    display: none;
     max-width: 100%;
     max-height: 80vh;
     object-fit: contain;

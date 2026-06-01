@@ -1,26 +1,40 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { fetchCloudinaryImages } from '../lib/cloudinary';
+import { fetchCloudinaryMedia } from '../lib/cloudinary';
+import type { CloudinaryMedia } from '../lib/cloudinary';
 
-let images: Awaited<ReturnType<typeof fetchCloudinaryImages>> = [];
+let media: CloudinaryMedia[] = [];
 try {
-  images = await fetchCloudinaryImages();
+  media = await fetchCloudinaryMedia();
 } catch (error) {
-  console.error('Failed to fetch Cloudinary images:', error);
+  console.error('Failed to fetch Cloudinary media:', error);
 }
 ---
 <Layout title="Work — Lily Savage">
   <section class="work">
     <div class="work-grid">
-      {images.map((img, i) => (
+      {media.map((item, i) => (
         <div class="grid-item">
-          <img
-            src={img.secure_url}
-            alt={img.title || `Project ${i + 1}`}
-            data-lightbox
-            data-title={img.title}
-            data-description={img.description}
-          />
+          {item.resource_type === 'video' ? (
+            <video
+              src={item.secure_url}
+              autoplay
+              muted
+              loop
+              playsinline
+              data-lightbox
+              data-title={item.title}
+              data-description={item.description}
+            />
+          ) : (
+            <img
+              src={item.secure_url}
+              alt={item.title || `Project ${i + 1}`}
+              data-lightbox
+              data-title={item.title}
+              data-description={item.description}
+            />
+          )}
         </div>
       ))}
     </div>
@@ -42,9 +56,11 @@ try {
     width: 100%;
   }
 
-  .grid-item img {
+  .grid-item img,
+  .grid-item video {
     width: 100%;
     height: auto;
+    display: block;
     cursor: pointer;
   }
 
