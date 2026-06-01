@@ -9,15 +9,14 @@ export interface CloudinaryMedia {
 
 export type CloudinaryImage = CloudinaryMedia;
 
-interface CloudinaryResource {
+interface CloudinarySearchResource {
   public_id: string;
   secure_url: string;
   created_at: string;
+  resource_type: string;
   context?: {
-    custom?: {
-      caption?: string;
-      alt?: string;
-    };
+    caption?: string;
+    alt?: string;
   };
 }
 
@@ -25,32 +24,46 @@ function makeAuth(apiKey: string, apiSecret: string) {
   return `Basic ${Buffer.from(`${apiKey}:${apiSecret}`).toString('base64')}`;
 }
 
-async function fetchResources(
+function getEnv() {
+  const cloudName = import.meta.env.CLOUDINARY_CLOUD_NAME;
+  const apiKey = import.meta.env.CLOUDINARY_API_KEY;
+  const apiSecret = import.meta.env.CLOUDINARY_API_SECRET;
+  const folder = import.meta.env.CLOUDINARY_FOLDER;
+
+  if (!cloudName || !apiKey || !apiSecret) {
+    throw new Error('Missing Cloudinary environment variables');
+  }
+  if (!folder) {
+    throw new Error('Missing CLOUDINARY_FOLDER environment variable');
+  }
+
+  return { cloudName, apiKey, apiSecret, folder };
+}
+
+async function searchResources(
   cloudName: string,
   auth: string,
+  folder: string,
   resourceType: 'image' | 'video'
-): Promise<CloudinaryResource[]> {
-  const params = new URLSearchParams({ context: 'true', max_results: '500', prefix: 'portfolio/' });
+): Promise<CloudinarySearchResource[]> {
+  const params = new URLSearchParams({
+    expression: `asset_folder=${folder} AND resource_type=${resourceType}`,
+    max_results: '500',
+    with_field: 'context',
+  });
   const response = await fetch(
-    `https://api.cloudinary.com/v1_1/${cloudName}/resources/${resourceType}?${params}`,
+    `https://api.cloudinary.com/v1_1/${cloudName}/resources/search?${params}`,
     { headers: { Authorization: auth } }
   );
   if (!response.ok) {
     throw new Error(`Cloudinary API error: ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
-  return data.resources as CloudinaryResource[];
+  return (data.resources ?? []) as CloudinarySearchResource[];
 }
 
 export async function fetchAboutPortrait(): Promise<CloudinaryMedia | null> {
-  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-  const apiKey = process.env.CLOUDINARY_API_KEY;
-  const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-  if (!cloudName || !apiKey || !apiSecret) {
-    throw new Error('Missing Cloudinary environment variables');
-  }
-
+  const { cloudName, apiKey, apiSecret } = getEnv();
   const auth = makeAuth(apiKey, apiSecret);
 
   const tagResponse = await fetch(
@@ -61,7 +74,7 @@ export async function fetchAboutPortrait(): Promise<CloudinaryMedia | null> {
   if (tagResponse.ok) {
     const tagData = await tagResponse.json();
     if (tagData.resources?.length > 0) {
-      const r = tagData.resources[0] as CloudinaryResource;
+      const r = tagData.resources[0];
       return {
         public_id: r.public_id,
         secure_url: r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/'),
@@ -78,46 +91,32 @@ export async function fetchAboutPortrait(): Promise<CloudinaryMedia | null> {
 }
 
 export async function fetchCloudinaryImages(): Promise<CloudinaryMedia[]> {
-  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-  const apiKey = process.env.CLOUDINARY_API_KEY;
-  const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-  if (!cloudName || !apiKey || !apiSecret) {
-    throw new Error('Missing Cloudinary environment variables');
-  }
-
-  const resources = await fetchResources(cloudName, makeAuth(apiKey, apiSecret), 'image');
+  const { cloudName, apiKey, apiSecret, folder } = getEnv();
+  const resources = await searchResources(cloudName, makeAuth(apiKey, apiSecret), folder, 'image');
 
   return resources
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .map((r) => ({
       public_id: r.public_id,
       secure_url: r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/'),
-      title: r.context?.custom?.caption ?? '',
-      description: r.context?.custom?.alt ?? '',
+      title: r.context?.caption ?? '',
+      description: r.context?.alt ?? '',
       created_at: r.created_at,
       resource_type: 'image' as const,
     }));
 }
 
 export async function fetchCloudinaryVideos(): Promise<CloudinaryMedia[]> {
-  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-  const apiKey = process.env.CLOUDINARY_API_KEY;
-  const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-  if (!cloudName || !apiKey || !apiSecret) {
-    throw new Error('Missing Cloudinary environment variables');
-  }
-
-  const resources = await fetchResources(cloudName, makeAuth(apiKey, apiSecret), 'video');
+  const { cloudName, apiKey, apiSecret, folder } = getEnv();
+  const resources = await searchResources(cloudName, makeAuth(apiKey, apiSecret), folder, 'video');
 
   return resources
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .map((r) => ({
       public_id: r.public_id,
       secure_url: r.secure_url,
-      title: r.context?.custom?.caption ?? '',
-      description: r.context?.custom?.alt ?? '',
+      title: r.context?.caption ?? '',
+      description: r.context?.alt ?? '',
       created_at: r.created_at,
       resource_type: 'video' as const,
     }));
