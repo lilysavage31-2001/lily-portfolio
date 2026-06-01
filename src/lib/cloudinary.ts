@@ -122,6 +122,57 @@ export async function fetchCloudinaryVideos(): Promise<CloudinaryMedia[]> {
     }));
 }
 
+export interface ProjectMedia extends CloudinaryMedia {
+  projectNumber: number;
+  imageNumber: number;
+  label: string;
+}
+
+export async function fetchPortfolioProjects(): Promise<ProjectMedia[]> {
+  const { cloudName, apiKey, apiSecret, folder } = getEnv();
+  const auth = makeAuth(apiKey, apiSecret);
+
+  const foldersResponse = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloudName}/folders/${folder}`,
+    { headers: { Authorization: auth } }
+  );
+  if (!foldersResponse.ok) {
+    throw new Error(`Cloudinary Folders API error: ${foldersResponse.status}`);
+  }
+
+  const foldersData = await foldersResponse.json();
+  const subfolders: Array<{ name: string; path: string }> = foldersData.folders ?? [];
+
+  const sorted = subfolders.sort((a, b) => {
+    const numA = parseInt(a.name);
+    const numB = parseInt(b.name);
+    return (!isNaN(numA) && !isNaN(numB)) ? numA - numB : a.name.localeCompare(b.name);
+  });
+
+  const projectResults = await Promise.all(
+    sorted.map(async (subfolder, idx) => {
+      const projectNumber = parseInt(subfolder.name) || idx + 1;
+      const resources = await searchResources(cloudName, auth, subfolder.path, 'image');
+
+      return resources
+        .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+        .map((r, imageIdx) => ({
+          public_id: r.public_id,
+          secure_url: r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/'),
+          title: r.context?.caption ?? '',
+          description: r.context?.alt ?? '',
+          created_at: r.created_at,
+          resource_type: 'image' as const,
+          projectNumber,
+          imageNumber: imageIdx + 1,
+          label: `${projectNumber}.${imageIdx + 1}`,
+        }));
+    })
+  );
+
+  return projectResults.flat();
+}
+
 export async function fetchCloudinaryMedia(): Promise<CloudinaryMedia[]> {
   const [images, videos] = await Promise.all([
     fetchCloudinaryImages(),

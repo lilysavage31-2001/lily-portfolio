@@ -1,44 +1,31 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { fetchCloudinaryMedia } from '../lib/cloudinary';
-import type { CloudinaryMedia } from '../lib/cloudinary';
+import { fetchPortfolioProjects } from '../lib/cloudinary';
+import type { ProjectMedia } from '../lib/cloudinary';
 
-let media: CloudinaryMedia[] = [];
+let items: ProjectMedia[] = [];
 try {
-  media = await fetchCloudinaryMedia();
+  items = await fetchPortfolioProjects();
 } catch (error) {
-  console.error('Failed to fetch Cloudinary media:', error);
+  console.error('Failed to fetch portfolio projects:', error);
 }
 ---
 <Layout title="Work — Lily Savage">
   <section class="work">
     <div class="work-grid">
-      {media.map((item, i) => (
+      {items.map((item) => (
         <div class="grid-item">
-          {item.resource_type === 'video' ? (
-            <video
-              src={item.secure_url}
-              autoplay
-              muted
-              loop
-              playsinline
-              data-lightbox
-              data-title={item.title}
-              data-description={item.description}
-            />
-          ) : (
-            <img
-              src={item.secure_url}
-              alt={item.title || `Project ${i + 1}`}
-              data-lightbox
-              data-title={item.title}
-              data-description={item.description}
-            />
-          )}
+          <img
+            src={item.secure_url}
+            alt={item.title || item.label}
+            data-lightbox
+            data-title={item.title}
+            data-description={item.description}
+          />
+          <span class="item-label">{item.label}</span>
         </div>
       ))}
     </div>
-
   </section>
 </Layout>
 
@@ -55,15 +42,28 @@ try {
     width: 100%;
   }
 
-  .grid-item img,
-  .grid-item video {
+  .grid-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .grid-item img {
     width: 100%;
     height: auto;
     display: block;
     cursor: pointer;
   }
 
-@media (max-width: 768px) {
+  .item-label {
+    margin-top: 5px;
+    font-size: 10px;
+    font-weight: 100;
+    letter-spacing: 0.04em;
+    color: #000;
+    opacity: 0.4;
+  }
+
+  @media (max-width: 768px) {
     .work {
       padding: 2.5rem 1.5rem 3.5rem;
     }
