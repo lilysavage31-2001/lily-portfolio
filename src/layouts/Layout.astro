@@ -116,14 +116,6 @@ const { title = "Lily Savage" } = Astro.props;
 </html>
 
 <style is:global>
-  @font-face {
-    font-family: 'MartianMono';
-    src: url('/fonts/MartianMonoSemiCondensed-Thin.otf') format('opentype');
-    font-weight: 100;
-    font-style: normal;
-    font-display: swap;
-  }
-
   *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -131,7 +123,7 @@ const { title = "Lily Savage" } = Astro.props;
   }
 
   html {
-    font-family: 'MartianMono', monospace;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     font-weight: 100;
     font-size: 16px;
     background: #FAFAFA;
@@ -174,7 +166,7 @@ const { title = "Lily Savage" } = Astro.props;
   .nav-logo {
     font-size: 16px;
     font-weight: 200;
-    letter-spacing: 0.02em;
+    letter-spacing: -0.02em;
   }
 
   .nav-links {
@@ -185,7 +177,7 @@ const { title = "Lily Savage" } = Astro.props;
   .nav-links a {
     font-size: 16px;
     font-weight: 200;
-    letter-spacing: 0.02em;
+    letter-spacing: -0.02em;
   }
 
   /* ── FOOTER ── */
@@ -207,7 +199,7 @@ const { title = "Lily Savage" } = Astro.props;
   .footer-info p {
     font-size: 15px;
     font-weight: 100;
-    letter-spacing: 0.01em;
+    letter-spacing: -0.02em;
     line-height: 1.6;
   }
 
@@ -220,7 +212,7 @@ const { title = "Lily Savage" } = Astro.props;
   .footer-links a {
     font-size: 15px;
     font-weight: 100;
-    letter-spacing: 0.01em;
+    letter-spacing: -0.02em;
   }
 
   /* ── LIGHTBOX ── */
@@ -273,7 +265,7 @@ const { title = "Lily Savage" } = Astro.props;
   #lightbox-title {
     font-size: 14px;
     font-weight: 200;
-    letter-spacing: 0.04em;
+    letter-spacing: -0.02em;
     margin-bottom: 0.35rem;
   }
 
@@ -281,7 +273,7 @@ const { title = "Lily Savage" } = Astro.props;
     font-size: 13px;
     font-weight: 200;
     opacity: 0.6;
-    letter-spacing: 0.02em;
+    letter-spacing: -0.02em;
   }
 
   /* ── RESPONSIVE ── */
