@@ -1,13 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { fetchCloudinaryImages } from '../lib/cloudinary';
+import { fetchHeroImages } from '../lib/cloudinary';
+import type { CloudinaryMedia } from '../lib/cloudinary';
 
-let heroImages: Awaited<ReturnType<typeof fetchCloudinaryImages>> = [];
+let heroImages: CloudinaryMedia[] = [];
 try {
-  const allImages = await fetchCloudinaryImages();
-  heroImages = allImages.slice(0, 2);
+  heroImages = await fetchHeroImages();
 } catch (error) {
-  console.error('Failed to fetch Cloudinary images:', error);
+  console.error('Failed to fetch hero images:', error);
 }
 ---
 <Layout title="Lily Savage">
@@ -31,19 +31,21 @@ try {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4rem 3rem 5rem;
+    padding: 4rem 1.5rem 5rem;
   }
 
   .hero-images {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 1.25rem;
-    width: 88%;
-    max-width: 1200px;
+    width: 100%;
+    max-width: 1400px;
+    align-items: flex-start;
   }
 
   .hero-images img {
-    width: 100%;
+    flex: 1 1 0;
+    min-width: 0;
+    width: 0;
     height: auto;
     cursor: pointer;
   }
@@ -54,15 +56,13 @@ try {
     }
 
     .hero-images {
-      grid-template-columns: 1fr;
-      width: 100%;
+      flex-direction: column;
       gap: 1rem;
     }
-  }
 
-  @media (min-width: 769px) and (max-width: 1024px) {
-    .hero-images {
-      width: 94%;
+    .hero-images img {
+      flex: none;
+      width: 100%;
     }
   }
 </style>
