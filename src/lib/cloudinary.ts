@@ -11,6 +11,7 @@ export type CloudinaryImage = CloudinaryMedia;
 
 interface CloudinarySearchResource {
   public_id: string;
+  filename: string;
   secure_url: string;
   created_at: string;
   resource_type: string;
@@ -155,7 +156,7 @@ export async function fetchPortfolioProjects(): Promise<ProjectMedia[]> {
       const resources = await searchResources(cloudName, auth, subfolder.path, 'image');
 
       return resources
-        .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+        .sort((a, b) => a.filename.localeCompare(b.filename))
         .map((r, imageIdx) => ({
           public_id: r.public_id,
           secure_url: r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/'),
