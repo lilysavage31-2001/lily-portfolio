@@ -11,9 +11,6 @@ const { title = "Lily Savage" } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap" rel="stylesheet" />
   </head>
   <body>
     <nav>
@@ -119,6 +116,14 @@ const { title = "Lily Savage" } = Astro.props;
 </html>
 
 <style is:global>
+  @font-face {
+    font-family: 'MartianMono';
+    src: url('/fonts/MartianMonoSemiCondensed-Thin.otf') format('opentype');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+  }
+
   *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -126,8 +131,8 @@ const { title = "Lily Savage" } = Astro.props;
   }
 
   html {
-    font-family: 'Inter', sans-serif;
-    font-weight: 200;
+    font-family: 'MartianMono', monospace;
+    font-weight: 100;
     font-size: 16px;
     background: #FAFAFA;
     color: #000000;
