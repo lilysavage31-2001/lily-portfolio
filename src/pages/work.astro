@@ -15,13 +15,26 @@ try {
     <div class="work-grid">
       {items.map((item) => (
         <div class="grid-item">
-          <img
-            src={item.secure_url}
-            alt={item.title || item.label}
-            data-lightbox
-            data-title={item.title}
-            data-description={item.description}
-          />
+          {item.resource_type === 'video' ? (
+            <video
+              src={item.secure_url}
+              autoplay
+              muted
+              loop
+              playsinline
+              data-lightbox
+              data-title={item.title}
+              data-description={item.description}
+            />
+          ) : (
+            <img
+              src={item.secure_url}
+              alt={item.title || item.label}
+              data-lightbox
+              data-title={item.title}
+              data-description={item.description}
+            />
+          )}
           <span class="item-label">{item.label}</span>
         </div>
       ))}
@@ -47,7 +60,8 @@ try {
     flex-direction: column;
   }
 
-  .grid-item img {
+  .grid-item img,
+  .grid-item video {
     width: 100%;
     height: auto;
     display: block;

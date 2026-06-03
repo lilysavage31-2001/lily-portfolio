@@ -192,21 +192,30 @@ export async function fetchPortfolioProjects(): Promise<ProjectMedia[]> {
   const projectResults = await Promise.all(
     sorted.map(async (subfolder, idx) => {
       const projectNumber = parseInt(subfolder.name) || idx + 1;
-      const resources = await searchResources(cloudName, auth, subfolder.path, 'image');
 
-      return resources
-        .sort((a, b) => a.display_name.localeCompare(b.display_name))
-        .map((r, imageIdx) => ({
-          public_id: r.public_id,
-          secure_url: r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/'),
-          title: r.context?.caption ?? '',
-          description: r.context?.alt ?? '',
-          created_at: r.created_at,
-          resource_type: 'image' as const,
-          projectNumber,
-          imageNumber: imageIdx + 1,
-          label: `${projectNumber}.${imageIdx + 1}`,
-        }));
+      const [images, videos] = await Promise.all([
+        searchResources(cloudName, auth, subfolder.path, 'image'),
+        searchResources(cloudName, auth, subfolder.path, 'video'),
+      ]);
+
+      const all = [
+        ...images.map(r => ({ ...r, resource_type: 'image' as const })),
+        ...videos.map(r => ({ ...r, resource_type: 'video' as const })),
+      ].sort((a, b) => a.display_name.localeCompare(b.display_name));
+
+      return all.map((r, itemIdx) => ({
+        public_id: r.public_id,
+        secure_url: r.resource_type === 'image'
+          ? r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/')
+          : r.secure_url,
+        title: r.context?.caption ?? '',
+        description: r.context?.alt ?? '',
+        created_at: r.created_at,
+        resource_type: r.resource_type,
+        projectNumber,
+        imageNumber: itemIdx + 1,
+        label: `${projectNumber}.${itemIdx + 1}`,
+      }));
     })
   );
 
