@@ -75,31 +75,41 @@ async function searchResources(
   return all;
 }
 
-export async function fetchHeroImages(): Promise<CloudinaryMedia[]> {
+export async function fetchHeroMedia(): Promise<CloudinaryMedia[]> {
   const { cloudName, apiKey, apiSecret } = getEnv();
   const auth = makeAuth(apiKey, apiSecret);
 
-  const response = await fetch(
-    `https://api.cloudinary.com/v1_1/${cloudName}/resources/image/tags/hero?max_results=500&context=true`,
-    { headers: { Authorization: auth } }
+  const [imageRes, videoRes] = await Promise.all([
+    fetch(`https://api.cloudinary.com/v1_1/${cloudName}/resources/image/tags/hero?max_results=500&context=true`, { headers: { Authorization: auth } }),
+    fetch(`https://api.cloudinary.com/v1_1/${cloudName}/resources/video/tags/hero?max_results=500&context=true`, { headers: { Authorization: auth } }),
+  ]);
+
+  if (!imageRes.ok) throw new Error(`Cloudinary API error: ${imageRes.status}`);
+  if (!videoRes.ok) throw new Error(`Cloudinary API error: ${videoRes.status}`);
+
+  const [imageData, videoData] = await Promise.all([imageRes.json(), videoRes.json()]);
+
+  const images: CloudinaryMedia[] = (imageData.resources ?? []).map((r: CloudinaryResource) => ({
+    public_id: r.public_id,
+    secure_url: r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/'),
+    title: r.context?.custom?.caption ?? '',
+    description: r.context?.custom?.alt ?? '',
+    created_at: r.created_at,
+    resource_type: 'image' as const,
+  }));
+
+  const videos: CloudinaryMedia[] = (videoData.resources ?? []).map((r: CloudinaryResource) => ({
+    public_id: r.public_id,
+    secure_url: r.secure_url,
+    title: r.context?.custom?.caption ?? '',
+    description: r.context?.custom?.alt ?? '',
+    created_at: r.created_at,
+    resource_type: 'video' as const,
+  }));
+
+  return [...images, ...videos].sort(
+    (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
-
-  if (!response.ok) {
-    throw new Error(`Cloudinary API error: ${response.status} ${response.statusText}`);
-  }
-
-  const data = await response.json();
-
-  return (data.resources as CloudinaryResource[])
-    .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
-    .map((r) => ({
-      public_id: r.public_id,
-      secure_url: r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/'),
-      title: r.context?.custom?.caption ?? '',
-      description: r.context?.custom?.alt ?? '',
-      created_at: r.created_at,
-      resource_type: 'image' as const,
-    }));
 }
 
 export async function fetchAboutPortrait(): Promise<CloudinaryMedia | null> {

@@ -1,26 +1,39 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { fetchHeroImages } from '../lib/cloudinary';
+import { fetchHeroMedia } from '../lib/cloudinary';
 import type { CloudinaryMedia } from '../lib/cloudinary';
 
-let heroImages: CloudinaryMedia[] = [];
+let heroItems: CloudinaryMedia[] = [];
 try {
-  heroImages = await fetchHeroImages();
+  heroItems = await fetchHeroMedia();
 } catch (error) {
-  console.error('Failed to fetch hero images:', error);
+  console.error('Failed to fetch hero media:', error);
 }
 ---
 <Layout title="Lily Savage">
   <section class="hero">
-    <div class="hero-images">
-      {heroImages.map((img, i) => (
-        <img
-          src={img.secure_url}
-          alt={img.title || `Portfolio image ${i + 1}`}
-          data-lightbox
-          data-title={img.title}
-          data-description={img.description}
-        />
+    <div class="hero-items">
+      {heroItems.map((item, i) => (
+        item.resource_type === 'video' ? (
+          <video
+            src={item.secure_url}
+            autoplay
+            muted
+            loop
+            playsinline
+            data-lightbox
+            data-title={item.title}
+            data-description={item.description}
+          />
+        ) : (
+          <img
+            src={item.secure_url}
+            alt={item.title || `Portfolio image ${i + 1}`}
+            data-lightbox
+            data-title={item.title}
+            data-description={item.description}
+          />
+        )
       ))}
     </div>
   </section>
@@ -34,7 +47,7 @@ try {
     padding: 4rem 1.5rem 5rem;
   }
 
-  .hero-images {
+  .hero-items {
     display: flex;
     gap: 1.25rem;
     width: 100%;
@@ -42,12 +55,14 @@ try {
     align-items: flex-start;
   }
 
-  .hero-images img {
+  .hero-items img,
+  .hero-items video {
     flex: 1 1 0;
     min-width: 0;
     width: 0;
     height: auto;
     cursor: pointer;
+    display: block;
   }
 
   @media (max-width: 768px) {
@@ -55,12 +70,13 @@ try {
       padding: 2.5rem 1.5rem 3rem;
     }
 
-    .hero-images {
+    .hero-items {
       flex-direction: column;
       gap: 1rem;
     }
 
-    .hero-images img {
+    .hero-items img,
+    .hero-items video {
       flex: none;
       width: 100%;
     }
