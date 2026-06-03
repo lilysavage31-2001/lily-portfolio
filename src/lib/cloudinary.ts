@@ -48,20 +48,31 @@ async function searchResources(
   folder: string,
   resourceType: 'image' | 'video'
 ): Promise<CloudinarySearchResource[]> {
-  const params = new URLSearchParams({
-    expression: `asset_folder=${folder} AND resource_type=${resourceType}`,
-    max_results: '500',
-    with_field: 'context',
-  });
-  const response = await fetch(
-    `https://api.cloudinary.com/v1_1/${cloudName}/resources/search?${params}`,
-    { headers: { Authorization: auth } }
-  );
-  if (!response.ok) {
-    throw new Error(`Cloudinary API error: ${response.status} ${response.statusText}`);
-  }
-  const data = await response.json();
-  return (data.resources ?? []) as CloudinarySearchResource[];
+  const expression = `asset_folder=${folder} AND resource_type=${resourceType}`;
+  const all: CloudinarySearchResource[] = [];
+  let nextCursor: string | undefined;
+
+  do {
+    const params = new URLSearchParams({
+      expression,
+      max_results: '500',
+      with_field: 'context',
+    });
+    if (nextCursor) params.set('next_cursor', nextCursor);
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/resources/search?${params}`,
+      { headers: { Authorization: auth } }
+    );
+    if (!response.ok) {
+      throw new Error(`Cloudinary API error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    all.push(...((data.resources ?? []) as CloudinarySearchResource[]));
+    nextCursor = data.next_cursor;
+  } while (nextCursor);
+
+  return all;
 }
 
 export async function fetchHeroImages(): Promise<CloudinaryMedia[]> {
