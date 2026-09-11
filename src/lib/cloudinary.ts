@@ -193,10 +193,11 @@ export async function fetchPortfolioProjects(): Promise<ProjectMedia[]> {
   const foldersData = await foldersResponse.json();
   const subfolders: Array<{ name: string; path: string }> = foldersData.folders ?? [];
 
+  // Newest (highest-numbered) project folder first
   const sorted = subfolders.sort((a, b) => {
     const numA = parseInt(a.name);
     const numB = parseInt(b.name);
-    return (!isNaN(numA) && !isNaN(numB)) ? numA - numB : a.name.localeCompare(b.name);
+    return (!isNaN(numA) && !isNaN(numB)) ? numB - numA : b.name.localeCompare(a.name);
   });
 
   const projectResults = await Promise.all(
@@ -211,7 +212,7 @@ export async function fetchPortfolioProjects(): Promise<ProjectMedia[]> {
       const all = [
         ...images.map(r => ({ ...r, resource_type: 'image' as const })),
         ...videos.map(r => ({ ...r, resource_type: 'video' as const })),
-      ].sort((a, b) => a.display_name.localeCompare(b.display_name));
+      ].sort((a, b) => a.display_name.localeCompare(b.display_name, undefined, { numeric: true }));
 
       return all.map((r, itemIdx) => ({
         public_id: r.public_id,
