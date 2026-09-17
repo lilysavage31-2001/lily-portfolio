@@ -202,7 +202,8 @@ export async function fetchPortfolioProjects(): Promise<ProjectMedia[]> {
 
   const projectResults = await Promise.all(
     sorted.map(async (subfolder, idx) => {
-      const projectNumber = parseInt(subfolder.name) || idx + 1;
+      // Display numbers follow page order, independent of Cloudinary folder names
+      const projectNumber = idx + 1;
 
       const [images, videos] = await Promise.all([
         searchResources(cloudName, auth, subfolder.path, 'image'),
