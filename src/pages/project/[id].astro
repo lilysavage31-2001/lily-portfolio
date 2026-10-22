@@ -5,10 +5,42 @@ import type { CloudinaryMedia } from '../../lib/cloudinary';
 
 const { id = '' } = Astro.params;
 
-// Folder ids go into a Cloudinary search expression, so only allow plain names
 if (!/^[\w-]+$/.test(id)) {
   return new Response(null, { status: 404 });
 }
+
+// ─── PROJECT INFO ────────────────────────────────────────────────
+// Edit each project's details here. The key is the folder number (id).
+const projectData: Record<string, {
+  name: string;
+  client?: string;
+  collaborators?: string;
+  year?: string;
+  deliverables?: string;
+  brief?: string;
+  solution?: string;
+}> = {
+  '9': {
+    name: 'Patina',
+    client: 'Patina',
+    collaborators: 'Photography by Katie Begbie\nModel: Ali Rodinciuc',
+    year: '2026',
+    deliverables: 'Art Direction',
+    brief: '',
+    solution: '',
+  },
+  // Add more projects below, e.g.:
+  // '8': {
+  //   name: 'Love James',
+  //   client: 'Love James',
+  //   collaborators: '',
+  //   year: '2025',
+  //   deliverables: 'Art Direction, Styling',
+  //   brief: '',
+  //   solution: '',
+  // },
+};
+// ─────────────────────────────────────────────────────────────────
 
 let items: CloudinaryMedia[] = [];
 try {
@@ -21,11 +53,10 @@ if (items.length === 0) {
   return new Response(null, { status: 404 });
 }
 
-const cover = items.find((item) => item.resource_type === 'image') ?? items[0];
-const projectName = cover.title || id;
-const projectDescription = cover.title;
+const info = projectData[id];
+const projectName = info?.name || id;
 ---
-<Layout title={`${projectName} — Lily Savage`} projectName={projectName} projectDescription={projectDescription}>
+<Layout title={`${projectName} — Lily Savage`} projectName={projectName} projectInfo={info}>
   <section class="project">
     <div class="project-media">
       {items.map((item) => (
@@ -49,7 +80,7 @@ const projectDescription = cover.title;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 300px;
+    gap: 80px;
     padding: 60px 40px 120px;
   }
 
