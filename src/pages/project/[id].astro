@@ -49,7 +49,7 @@ if (items.length === 0) {
 
 const info = projectData[id];
 const cover = items.find((item) => item.resource_type === 'image') ?? items[0];
-const projectName = info?.name || cover.title || id;
+const projectName = info?.name || cover.title.split('|')[0].trim() || id;
 ---
 <Layout title={`${projectName} — Lily Savage`} projectName={projectName} projectInfo={info}>
   <section class="project">
