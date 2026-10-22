@@ -46,14 +46,13 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
     </main>
 
     <footer>
-      <div class="footer-info">
-        <p>Lily Savage is a graphic designer / art director / stylist</p>
-        <p>Currently Based in New Zealand</p>
-      </div>
-      <div class="footer-links">
-        <a href="mailto:lilysavage31@gmail.com">Email</a>
-        <a href="https://instagram.com/lilysavage_" target="_blank" rel="noopener noreferrer">Instagram</a>
-      </div>
+      {projectName ? (
+        <a href="/projects" class="nav-link">Back to all projects</a>
+      ) : (
+        <div class="footer-info">
+          <p>Lily is a Graphic Designer and Art Director building thoughtful brand worlds through considered typography, art direction and visual storytelling. My approach is rooted in simplicity, restraint and craft, creating identities that feel both timeless and contemporary.</p>
+        </div>
+      )}
     </footer>
 
     <div id="contact-overlay" class="contact-overlay">
@@ -333,7 +332,8 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
     font-size: 15px;
     font-weight: 400;
     letter-spacing: 0;
-    line-height: 1.6;
+    line-height: 1.1;
+    max-width: 40vw;
   }
 
   .footer-links {
@@ -536,6 +536,10 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
 
     footer {
       padding: 1rem 0.75rem;
+    }
+
+    .footer-info p {
+      max-width: none;
     }
   }
 </style>
