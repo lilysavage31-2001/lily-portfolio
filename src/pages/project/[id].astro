@@ -1,0 +1,62 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { fetchProjectMedia } from '../../lib/cloudinary';
+import type { CloudinaryMedia } from '../../lib/cloudinary';
+
+const { id = '' } = Astro.params;
+
+// Folder ids go into a Cloudinary search expression, so only allow plain names
+if (!/^[\w-]+$/.test(id)) {
+  return new Response(null, { status: 404 });
+}
+
+let items: CloudinaryMedia[] = [];
+try {
+  items = await fetchProjectMedia(id);
+} catch (error) {
+  console.error(`Failed to fetch project ${id}:`, error);
+}
+
+if (items.length === 0) {
+  return new Response(null, { status: 404 });
+}
+
+const cover = items.find((item) => item.resource_type === 'image') ?? items[0];
+const projectName = cover.title || id;
+const projectDescription = cover.title;
+---
+<Layout title={`${projectName} — Lily Savage`} projectName={projectName} projectDescription={projectDescription}>
+  <section class="project">
+    <div class="project-media">
+      {items.map((item) => (
+        item.resource_type === 'video' ? (
+          <video src={item.secure_url} autoplay muted loop playsinline />
+        ) : (
+          <img src={item.secure_url} alt={item.title || projectName} />
+        )
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .project {
+    padding-top: 70px;
+    background: #FAFAFA;
+  }
+
+  .project-media {
+    max-width: 1084px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .project-media img,
+  .project-media video {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

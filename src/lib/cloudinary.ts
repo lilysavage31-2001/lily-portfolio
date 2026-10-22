@@ -172,16 +172,29 @@ export async function fetchCloudinaryVideos(): Promise<CloudinaryMedia[]> {
     }));
 }
 
-export interface ProjectMedia extends CloudinaryMedia {
-  projectNumber: number;
-  imageNumber: number;
-  label: string;
+export interface ProjectFolder {
+  id: string;
+  cover: CloudinaryMedia | null;
 }
 
-export async function fetchPortfolioProjects(): Promise<ProjectMedia[]> {
-  const { cloudName, apiKey, apiSecret, folder } = getEnv();
-  const auth = makeAuth(apiKey, apiSecret);
+function byDisplayName(a: CloudinarySearchResource, b: CloudinarySearchResource) {
+  return a.display_name.localeCompare(b.display_name, undefined, { numeric: true });
+}
 
+function toMedia(r: CloudinarySearchResource, resourceType: 'image' | 'video'): CloudinaryMedia {
+  return {
+    public_id: r.public_id,
+    secure_url: resourceType === 'image'
+      ? r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/')
+      : r.secure_url,
+    title: r.context?.caption ?? '',
+    description: r.context?.alt ?? '',
+    created_at: r.created_at,
+    resource_type: resourceType,
+  };
+}
+
+async function listProjectFolders(cloudName: string, auth: string, folder: string) {
   const foldersResponse = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudName}/folders/${folder}`,
     { headers: { Authorization: auth } }
@@ -194,44 +207,45 @@ export async function fetchPortfolioProjects(): Promise<ProjectMedia[]> {
   const subfolders: Array<{ name: string; path: string }> = foldersData.folders ?? [];
 
   // Newest (highest-numbered) project folder first
-  const sorted = subfolders.sort((a, b) => {
+  return subfolders.sort((a, b) => {
     const numA = parseInt(a.name);
     const numB = parseInt(b.name);
     return (!isNaN(numA) && !isNaN(numB)) ? numB - numA : b.name.localeCompare(a.name);
   });
+}
 
-  const projectResults = await Promise.all(
-    sorted.map(async (subfolder, idx) => {
-      // Display numbers follow page order, independent of Cloudinary folder names
-      const projectNumber = idx + 1;
+export async function getProjectFolders(): Promise<ProjectFolder[]> {
+  const { cloudName, apiKey, apiSecret, folder } = getEnv();
+  const auth = makeAuth(apiKey, apiSecret);
 
-      const [images, videos] = await Promise.all([
-        searchResources(cloudName, auth, subfolder.path, 'image'),
-        searchResources(cloudName, auth, subfolder.path, 'video'),
-      ]);
+  const subfolders = await listProjectFolders(cloudName, auth, folder);
 
-      const all = [
-        ...images.map(r => ({ ...r, resource_type: 'image' as const })),
-        ...videos.map(r => ({ ...r, resource_type: 'video' as const })),
-      ].sort((a, b) => a.display_name.localeCompare(b.display_name, undefined, { numeric: true }));
-
-      return all.map((r, itemIdx) => ({
-        public_id: r.public_id,
-        secure_url: r.resource_type === 'image'
-          ? r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/')
-          : r.secure_url,
-        title: r.context?.caption ?? '',
-        description: r.context?.alt ?? '',
-        created_at: r.created_at,
-        resource_type: r.resource_type,
-        projectNumber,
-        imageNumber: itemIdx + 1,
-        label: `${projectNumber}.${itemIdx + 1}`,
-      }));
+  return Promise.all(
+    subfolders.map(async (subfolder) => {
+      // Cover is the first image by filename
+      const images = await searchResources(cloudName, auth, subfolder.path, 'image');
+      const first = images.sort(byDisplayName)[0];
+      return { id: subfolder.name, cover: first ? toMedia(first, 'image') : null };
     })
   );
+}
 
-  return projectResults.flat();
+export async function fetchProjectMedia(id: string): Promise<CloudinaryMedia[]> {
+  const { cloudName, apiKey, apiSecret, folder } = getEnv();
+  const auth = makeAuth(apiKey, apiSecret);
+  const path = `${folder}/${id}`;
+
+  const [images, videos] = await Promise.all([
+    searchResources(cloudName, auth, path, 'image'),
+    searchResources(cloudName, auth, path, 'video'),
+  ]);
+
+  return [
+    ...images.map(r => ({ r, type: 'image' as const })),
+    ...videos.map(r => ({ r, type: 'video' as const })),
+  ]
+    .sort((a, b) => byDisplayName(a.r, b.r))
+    .map(({ r, type }) => toMedia(r, type));
 }
 
 export async function fetchCloudinaryMedia(): Promise<CloudinaryMedia[]> {

@@ -1,0 +1,77 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getProjectFolders } from '../lib/cloudinary';
+import type { ProjectFolder } from '../lib/cloudinary';
+
+let projects: ProjectFolder[] = [];
+try {
+  projects = await getProjectFolders();
+} catch (error) {
+  console.error('Failed to fetch project folders:', error);
+}
+---
+<Layout title="Projects — Lily Savage">
+  <section class="projects">
+    <div class="projects-grid">
+      {projects.map((project) => (
+        <a href={`/project/${project.id}`} class="project-card">
+          {project.cover && (
+            <img src={project.cover.secure_url} alt={project.cover.title || `Project ${project.id}`} />
+          )}
+          <span class="project-label">{project.cover?.title}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .projects {
+    padding: 70px 1.5rem 2.5rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    width: 100%;
+  }
+
+  .project-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+  }
+
+  .project-label {
+    margin-top: 5px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.08px;
+    line-height: 1.1;
+    text-align: center;
+    color: #000;
+    opacity: 0.33;
+  }
+
+  .project-card:hover .project-label {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .projects {
+      padding: 70px 0.75rem 1.75rem;
+    }
+
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
