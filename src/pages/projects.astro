@@ -18,7 +18,11 @@ try {
           {project.cover && (
             <img src={project.cover.secure_url} alt={project.cover.title || `Project ${project.id}`} />
           )}
-          <span class="project-label">{project.cover?.title}</span>
+          <span class="project-label">
+            {project.cover?.title?.split('|').map((part) => (
+              <span class="project-label-line">{part.trim()}</span>
+            ))}
+          </span>
         </a>
       ))}
     </div>
@@ -49,15 +53,23 @@ try {
   }
 
   .project-label {
-    margin-top: 5px;
+    margin-top: 6px;
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: 8px;
+    font-size: 9px;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.08px;
+    letter-spacing: 0.09px;
     line-height: 1.1;
     text-align: center;
     color: #000;
     opacity: 0.33;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .project-label-line {
+    display: block;
   }
 
   .project-card:hover .project-label {

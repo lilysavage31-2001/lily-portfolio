@@ -46,17 +46,26 @@ const projectDescription = cover.title;
   }
 
   .project-media {
-    max-width: 1084px;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    gap: 80px;
+    padding: 60px 40px 120px;
   }
 
   .project-media img,
   .project-media video {
-    width: 100%;
-    height: auto;
     display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 90vh;
+    width: auto;
+  }
+
+  @media (max-width: 768px) {
+    .project-media {
+      gap: 40px;
+      padding: 40px 20px 80px;
+    }
   }
 </style>
