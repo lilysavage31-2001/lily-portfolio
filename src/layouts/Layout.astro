@@ -15,6 +15,8 @@ interface Props {
   projectInfo?: ProjectInfo;
 }
 const { title = "Lily Savage", projectName, projectInfo } = Astro.props;
+// Every project page gets an info overlay, even without a projectData entry
+const info: Partial<ProjectInfo> = projectInfo ?? {};
 ---
 <!doctype html>
 <html lang="en">
@@ -79,47 +81,47 @@ const { title = "Lily Savage", projectName, projectInfo } = Astro.props;
       </div>
     </div>
 
-    {projectInfo !== undefined && (
+    {projectName && (
       <div id="info-overlay" class="info-overlay">
         <button class="info-close" id="info-close">Close</button>
         <div class="info-card">
-          {projectInfo.client && (
+          {info.client && (
             <div class="info-section">
               <span class="info-label">Client</span>
-              <span class="info-value">{projectInfo.client}</span>
+              <span class="info-value">{info.client}</span>
             </div>
           )}
-          {projectInfo.collaborators && (
+          {info.collaborators && (
             <div class="info-section">
               <span class="info-label">Collaborators</span>
-              <span class="info-value info-value--pre">{projectInfo.collaborators}</span>
+              <span class="info-value info-value--pre">{info.collaborators}</span>
             </div>
           )}
-          {projectInfo.year && (
+          {info.year && (
             <div class="info-section">
               <span class="info-label">Year</span>
-              <span class="info-value">{projectInfo.year}</span>
+              <span class="info-value">{info.year}</span>
             </div>
           )}
-          {projectInfo.deliverables && (
+          {info.deliverables && (
             <div class="info-section">
               <span class="info-label">Deliverables</span>
-              <span class="info-value">{projectInfo.deliverables}</span>
+              <span class="info-value">{info.deliverables}</span>
             </div>
           )}
-          {projectInfo.brief && (
+          {info.brief && (
             <div class="info-section">
               <span class="info-label">Brief</span>
-              <span class="info-value">{projectInfo.brief}</span>
+              <span class="info-value">{info.brief}</span>
             </div>
           )}
-          {projectInfo.solution && (
+          {info.solution && (
             <div class="info-section">
               <span class="info-label">Solution</span>
-              <span class="info-value">{projectInfo.solution}</span>
+              <span class="info-value">{info.solution}</span>
             </div>
           )}
-          {!projectInfo.client && !projectInfo.collaborators && !projectInfo.year && !projectInfo.deliverables && !projectInfo.brief && !projectInfo.solution && (
+          {!info.client && !info.collaborators && !info.year && !info.deliverables && !info.brief && !info.solution && (
             <p class="info-empty">No project information added yet.</p>
           )}
         </div>
