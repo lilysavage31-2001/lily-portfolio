@@ -1,8 +1,10 @@
 ---
 interface Props {
   title?: string;
+  projectName?: string;
+  projectDescription?: string;
 }
-const { title = "Lily Savage" } = Astro.props;
+const { title = "Lily Savage", projectName, projectDescription } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -14,11 +16,17 @@ const { title = "Lily Savage" } = Astro.props;
   </head>
   <body>
     <nav>
-      <a href="/" class="nav-logo">lily savage</a>
-      <div class="nav-links">
-        <a href="/work">work</a>
-        <a href="mailto:hello@lilysavage.com">contact</a>
+      <a href="/" class="nav-logo">Lily Savage</a>
+      <div class="nav-center">
+        <a href="/projects" class="nav-link" id="nav-projects">Projects</a>
+        {projectName && (
+          <>
+            <span class="nav-project-name">{projectName}</span>
+            <button class="nav-link nav-info-btn" id="nav-info-btn">Project Information +</button>
+          </>
+        )}
       </div>
+      <a href="mailto:hello@lilysavage.com" class="nav-link nav-right">Contact</a>
     </nav>
 
     <main>
@@ -36,85 +44,77 @@ const { title = "Lily Savage" } = Astro.props;
       </div>
     </footer>
 
-    <div id="lightbox" aria-modal="true" role="dialog" aria-label="Media lightbox">
-      <div class="lightbox-content">
-        <img id="lightbox-img" src="" alt="" />
-        <video id="lightbox-video" muted loop playsinline></video>
-        <div class="lightbox-caption" id="lightbox-caption">
-          <p id="lightbox-title"></p>
-          <p id="lightbox-description"></p>
+    {projectDescription !== undefined && (
+      <div id="info-overlay" class="info-overlay">
+        <div class="info-overlay-content">
+          {projectDescription ? (
+            <p>{projectDescription}</p>
+          ) : (
+            <p style="opacity:0.33">No project information added yet.</p>
+          )}
         </div>
       </div>
-    </div>
+    )}
 
     <script>
-      const lightbox = document.getElementById('lightbox')!;
-      const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
-      const lightboxVideo = document.getElementById('lightbox-video') as HTMLVideoElement;
-      const lightboxCaption = document.getElementById('lightbox-caption')!;
-      const lightboxTitle = document.getElementById('lightbox-title')!;
-      const lightboxDescription = document.getElementById('lightbox-description')!;
-
-      function openLightboxImage(src: string, alt: string, title: string, description: string) {
-        lightboxVideo.pause();
-        lightboxVideo.src = '';
-        lightboxVideo.style.display = 'none';
-        lightboxImg.src = src;
-        lightboxImg.alt = alt;
-        lightboxImg.style.display = 'block';
-        lightboxTitle.textContent = title;
-        lightboxDescription.textContent = description;
-        lightboxCaption.hidden = !title && !description;
-        lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
+      // Info overlay
+      const infoBtn = document.getElementById('nav-info-btn');
+      const infoOverlay = document.getElementById('info-overlay');
+      if (infoBtn && infoOverlay) {
+        infoBtn.addEventListener('click', () => {
+          infoOverlay.classList.toggle('open');
+          document.body.style.overflow = infoOverlay.classList.contains('open') ? 'hidden' : '';
+        });
+        infoOverlay.addEventListener('click', (e) => {
+          if (e.target === infoOverlay) {
+            infoOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+          }
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            infoOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+          }
+        });
       }
-
-      function openLightboxVideo(src: string, title: string, description: string) {
-        lightboxImg.src = '';
-        lightboxImg.style.display = 'none';
-        lightboxVideo.src = src;
-        lightboxVideo.style.display = 'block';
-        lightboxVideo.play();
-        lightboxTitle.textContent = title;
-        lightboxDescription.textContent = description;
-        lightboxCaption.hidden = !title && !description;
-        lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeLightbox() {
-        lightbox.classList.remove('open');
-        document.body.style.overflow = '';
-        lightboxVideo.pause();
-        lightboxVideo.src = '';
-        lightboxVideo.style.display = 'none';
-        lightboxImg.style.display = 'block';
-      }
-
-      document.querySelectorAll<HTMLImageElement>('img[data-lightbox]').forEach(img => {
-        img.addEventListener('click', () =>
-          openLightboxImage(img.src, img.alt, img.dataset.title ?? '', img.dataset.description ?? '')
-        );
-      });
-
-      document.querySelectorAll<HTMLVideoElement>('video[data-lightbox]').forEach(video => {
-        video.addEventListener('click', () =>
-          openLightboxVideo(video.src, video.dataset.title ?? '', video.dataset.description ?? '')
-        );
-      });
-
-      lightbox.addEventListener('click', e => {
-        if (e.target === lightbox) closeLightbox();
-      });
-
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeLightbox();
-      });
     </script>
   </body>
 </html>
 
 <style is:global>
+  @font-face {
+    font-family: 'Caslon Ionic';
+    src: url('/fonts/CaslonIonic-Light-Trial.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Caslon Ionic';
+    src: url('/fonts/CaslonIonic-LightItalic-Trial.otf') format('opentype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Caslon Ionic';
+    src: url('/fonts/CaslonIonic-Regular-Trial.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Caslon Ionic';
+    src: url('/fonts/CaslonIonic-RegularItalic-Trial.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
   *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -145,10 +145,6 @@ const { title = "Lily Savage" } = Astro.props;
     text-decoration: none;
   }
 
-  a:hover {
-    opacity: 0.5;
-  }
-
   img {
     display: block;
     max-width: 100%;
@@ -156,27 +152,70 @@ const { title = "Lily Savage" } = Astro.props;
 
   /* ── NAV ── */
   nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: #FAFAFA;
+    z-index: 100;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem;
   }
 
   .nav-logo {
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 0;
+    position: absolute;
+    left: 20px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #000;
+    letter-spacing: 0.12px;
+    text-decoration: none;
   }
 
-  .nav-links {
+  .nav-center {
+    margin: 0 auto;
     display: flex;
-    gap: 2.5rem;
+    align-items: center;
+    gap: 12px;
   }
 
-  .nav-links a {
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 0;
+  .nav-link {
+    font-family: 'Caslon Ionic', Georgia, serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 12px;
+    color: #000;
+    opacity: 0.33;
+    letter-spacing: 0.36px;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .nav-link:hover {
+    opacity: 1;
+  }
+
+  .nav-project-name {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #000;
+    letter-spacing: 0.12px;
+  }
+
+  .nav-right {
+    position: absolute;
+    right: 20px;
+    opacity: 0.33;
+  }
+
+  .nav-right:hover {
+    opacity: 1;
   }
 
   /* ── FOOTER ── */
@@ -214,77 +253,43 @@ const { title = "Lily Savage" } = Astro.props;
     letter-spacing: 0;
   }
 
-  /* ── LIGHTBOX ── */
-  #lightbox {
+  /* ── INFO OVERLAY ── */
+  .info-overlay {
+    display: none;
     position: fixed;
     inset: 0;
-    z-index: 9999;
-    display: flex;
+    background: rgba(250, 250, 250, 0.97);
+    z-index: 200;
     align-items: center;
     justify-content: center;
-    background: rgba(250, 250, 250, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
   }
 
-  #lightbox.open {
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  .lightbox-content {
+  .info-overlay.open {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 88vw;
-    max-height: 92vh;
   }
 
-  #lightbox-img {
-    max-width: 100%;
-    max-height: 80vh;
-    object-fit: contain;
-    cursor: default;
-  }
-
-  #lightbox-video {
-    display: none;
-    max-width: 100%;
-    max-height: 80vh;
-    object-fit: contain;
-    cursor: default;
-  }
-
-  .lightbox-caption {
-    margin-top: 1.25rem;
-    text-align: center;
-  }
-
-  #lightbox-title {
+  .info-overlay-content {
+    max-width: 600px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0;
-    margin-bottom: 0.35rem;
-  }
-
-  #lightbox-description {
-    font-size: 13px;
-    font-weight: 400;
-    opacity: 0.6;
-    letter-spacing: 0;
+    line-height: 1.6;
+    color: #000;
+    text-align: center;
+    padding: 40px;
   }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     nav {
-      padding: 0.75rem;
+      padding: 0 16px;
     }
 
-    .nav-links {
-      gap: 1.5rem;
+    .nav-logo {
+      left: 16px;
+    }
+
+    .nav-right {
+      right: 16px;
     }
 
     footer {
