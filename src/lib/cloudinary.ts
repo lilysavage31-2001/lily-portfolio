@@ -17,6 +17,10 @@ interface CloudinarySearchResource {
   created_at: string;
   resource_type: string;
   context?: {
+    custom?: {
+      caption?: string;
+      alt?: string;
+    };
     caption?: string;
     alt?: string;
   };
@@ -177,8 +181,8 @@ export interface ProjectFolder {
   cover: CloudinaryMedia | null;
 }
 
-function byDisplayName(a: CloudinarySearchResource, b: CloudinarySearchResource) {
-  return a.display_name.localeCompare(b.display_name, undefined, { numeric: true });
+function byFilename(a: CloudinarySearchResource, b: CloudinarySearchResource) {
+  return a.filename.localeCompare(b.filename, undefined, { numeric: true });
 }
 
 function toMedia(r: CloudinarySearchResource, resourceType: 'image' | 'video'): CloudinaryMedia {
@@ -187,8 +191,8 @@ function toMedia(r: CloudinarySearchResource, resourceType: 'image' | 'video'): 
     secure_url: resourceType === 'image'
       ? r.secure_url.replace('/upload/', '/upload/q_auto/f_auto/')
       : r.secure_url,
-    title: r.context?.caption ?? '',
-    description: r.context?.alt ?? '',
+    title: r.context?.custom?.caption ?? r.context?.caption ?? '',
+    description: r.context?.custom?.alt ?? r.context?.alt ?? '',
     created_at: r.created_at,
     resource_type: resourceType,
   };
@@ -224,7 +228,7 @@ export async function getProjectFolders(): Promise<ProjectFolder[]> {
     subfolders.map(async (subfolder) => {
       // Cover is the first image by filename
       const images = await searchResources(cloudName, auth, subfolder.path, 'image');
-      const first = images.sort(byDisplayName)[0];
+      const first = images.sort(byFilename)[0];
       return { id: subfolder.name, cover: first ? toMedia(first, 'image') : null };
     })
   );
@@ -244,7 +248,7 @@ export async function fetchProjectMedia(id: string): Promise<CloudinaryMedia[]> 
     ...images.map(r => ({ r, type: 'image' as const })),
     ...videos.map(r => ({ r, type: 'video' as const })),
   ]
-    .sort((a, b) => byDisplayName(a.r, b.r))
+    .sort((a, b) => byFilename(a.r, b.r))
     .map(({ r, type }) => toMedia(r, type));
 }
 
