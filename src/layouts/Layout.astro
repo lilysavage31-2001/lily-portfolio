@@ -26,7 +26,7 @@ const { title = "Lily Savage", projectName, projectDescription } = Astro.props;
           </>
         )}
       </div>
-      <a href="mailto:hello@lilysavage.com" class="nav-link nav-right">Contact</a>
+      <button class="nav-link nav-right" id="nav-contact-btn">Contact</button>
     </nav>
 
     <main>
@@ -44,6 +44,24 @@ const { title = "Lily Savage", projectName, projectDescription } = Astro.props;
       </div>
     </footer>
 
+    <div id="contact-overlay" class="contact-overlay">
+      <button class="contact-close" id="contact-close">Close</button>
+      <div class="contact-card">
+        <div class="contact-row">
+          <span class="contact-label">Email</span>
+          <a href="mailto:lily@lilysavage.co" class="contact-value">lily@lilysavage.co</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">Instagram</span>
+          <a href="https://instagram.com/lilysavage_" target="_blank" rel="noopener noreferrer" class="contact-value">@lilysavage_</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">Based</span>
+          <span class="contact-value">New Zealand / London</span>
+        </div>
+      </div>
+    </div>
+
     {projectDescription !== undefined && (
       <div id="info-overlay" class="info-overlay">
         <div class="info-overlay-content">
@@ -57,6 +75,27 @@ const { title = "Lily Savage", projectName, projectDescription } = Astro.props;
     )}
 
     <script>
+      // Contact overlay
+      const contactBtn = document.getElementById('nav-contact-btn');
+      const contactOverlay = document.getElementById('contact-overlay');
+      const contactClose = document.getElementById('contact-close');
+      function openContact() {
+        contactOverlay?.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeContact() {
+        contactOverlay?.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      contactBtn?.addEventListener('click', openContact);
+      contactClose?.addEventListener('click', closeContact);
+      contactOverlay?.addEventListener('click', (e) => {
+        if (e.target === contactOverlay) closeContact();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeContact();
+      });
+
       // Info overlay
       const infoBtn = document.getElementById('nav-info-btn');
       const infoOverlay = document.getElementById('info-overlay');
@@ -251,6 +290,82 @@ const { title = "Lily Savage", projectName, projectDescription } = Astro.props;
     font-size: 15px;
     font-weight: 400;
     letter-spacing: 0;
+  }
+
+  /* ── CONTACT OVERLAY ── */
+  .contact-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(250, 250, 250, 0.80);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .contact-overlay.open {
+    display: flex;
+  }
+
+  .contact-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #000;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    letter-spacing: 0;
+  }
+
+  .contact-close:hover {
+    opacity: 0.5;
+  }
+
+  .contact-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 280px;
+  }
+
+  .contact-row {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .contact-row:first-child {
+    border-top: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .contact-label {
+    font-family: 'Caslon Ionic', Georgia, serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 11px;
+    color: #000;
+    opacity: 0.5;
+    margin-bottom: 2px;
+  }
+
+  .contact-value {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #000;
+    text-decoration: none;
+  }
+
+  .contact-value:hover {
+    opacity: 0.5;
   }
 
   /* ── INFO OVERLAY ── */
