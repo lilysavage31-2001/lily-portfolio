@@ -70,12 +70,9 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
           <span class="contact-label">New Zealand</span>
           <span class="contact-value">+64 210 8184377</span>
         </div>
-        <div class="contact-item">
-          <span class="contact-label">Website</span>
-          <a href="https://lilysavage.co" class="contact-value">lilysavage.co</a>
-        </div>
         <div class="contact-based">
-          <span class="contact-value">Based in London,<br />Available worldwide</span>
+          <span class="contact-value">From New Zealand.<br />Based in London.</span>
+          <span class="contact-value">Available for projects<br />anywhere in between.</span>
         </div>
       </div>
     </div>
@@ -281,7 +278,7 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
     font-style: italic;
     font-size: 12px;
     color: #000;
-    opacity: 0.33;
+    opacity: 0.43;
     letter-spacing: 0.36px;
     text-decoration: none;
     cursor: pointer;
@@ -305,7 +302,7 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
   .nav-right {
     position: absolute;
     right: 20px;
-    opacity: 0.33;
+    opacity: 0.43;
   }
 
   .nav-right:hover {
@@ -329,7 +326,7 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
   }
 
   .footer-info p {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 400;
     letter-spacing: 0;
     line-height: 1.1;
@@ -431,6 +428,11 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
 
   .contact-based .contact-value {
     display: block;
+    line-height: 1;
+  }
+
+  .contact-based .contact-value + .contact-value {
+    margin-top: 1em;
   }
 
   /* ── INFO OVERLAY ── */
