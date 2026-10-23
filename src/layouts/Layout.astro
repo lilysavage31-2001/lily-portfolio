@@ -27,7 +27,7 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
     <title>{title}</title>
   </head>
   <body>
-    <nav>
+    <nav class:list={[{ 'nav--project': projectName }]}>
       <a href="/" class="nav-logo">Lily Savage</a>
       <div class="nav-center">
         <a href="/projects" class="nav-link" id="nav-projects">Projects</a>
@@ -534,6 +534,28 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
 
     .nav-right {
       right: 16px;
+    }
+
+    /* Project pages: logo and Contact on top, project links on a second row */
+    nav.nav--project {
+      height: auto;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      row-gap: 10px;
+      padding: 14px 16px;
+    }
+
+    nav.nav--project .nav-logo,
+    nav.nav--project .nav-right {
+      position: static;
+    }
+
+    nav.nav--project .nav-center {
+      order: 3;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 4px;
     }
 
     footer {
