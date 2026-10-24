@@ -50,7 +50,7 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
         <a href="/projects" class="nav-link">Back to all projects</a>
       ) : (
         <div class="footer-info">
-          <p>Lily is a London-based Graphic Designer and Art Director working across identity and visual storytelling. Her approach is rooted in simplicity, restraint and craft, building brand worlds with clarity, character and a sense of permanence.</p>
+          <p>Lily is a <span class="nowrap">London-based</span> Graphic&nbsp;Designer and Art&nbsp;Director working across identity and visual storytelling. Her approach is rooted in simplicity, restraint and craft, building brand worlds with clarity, character and a sense of&nbsp;permanence.</p>
         </div>
       )}
     </footer>
@@ -228,6 +228,8 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
 
   main {
     flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   a {
@@ -331,6 +333,16 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
     letter-spacing: 0;
     line-height: 1.1;
     max-width: 40vw;
+    /* Balance line lengths and never leave a single word on the last line */
+    text-wrap: pretty;
+    hyphens: manual;
+    hanging-punctuation: first last;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+  }
+
+  .footer-info .nowrap {
+    white-space: nowrap;
   }
 
   .footer-links {
