@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getProjectFolders } from '../lib/cloudinary';
-import type { ProjectFolder } from '../lib/cloudinary';
+import { getProjectFolders, fetchProjectMedia } from '../lib/cloudinary';
+import type { ProjectFolder, CloudinaryMedia } from '../lib/cloudinary';
+import { projectData } from '../lib/projects';
 
 let projects: ProjectFolder[] = [];
 try {
@@ -9,22 +10,43 @@ try {
 } catch (error) {
   console.error('Failed to fetch project folders:', error);
 }
+
+// Swap in thumbnails set in projectData
+const thumbnails = new Map<string, CloudinaryMedia>();
+await Promise.all(
+  projects.map(async (project) => {
+    const name = projectData[project.id]?.thumbnail;
+    if (!name) return;
+    try {
+      const match = (await fetchProjectMedia(project.id)).find((item) => item.public_id.includes(name));
+      if (match) thumbnails.set(project.id, match);
+    } catch (error) {
+      console.error(`Failed to fetch thumbnail for project ${project.id}:`, error);
+    }
+  })
+);
 ---
 <Layout title="Projects — Lily Savage">
   <section class="projects">
     <div class="projects-grid">
-      {projects.map((project) => (
-        <a href={`/project/${project.id}`} class="project-card">
-          {project.cover && (
-            <img src={project.cover.secure_url} alt={project.cover.title || `Project ${project.id}`} />
-          )}
-          <span class="project-label">
-            {project.cover?.title?.split('|').map((part) => (
-              <span class="project-label-line">{part.trim()}</span>
-            ))}
-          </span>
-        </a>
-      ))}
+      {projects.map((project) => {
+        const thumb = thumbnails.get(project.id) ?? project.cover;
+        const caption = project.cover?.title || projectData[project.id]?.name || '';
+        return (
+          <a href={`/project/${project.id}`} class="project-card">
+            {thumb?.resource_type === 'video' ? (
+              <video src={thumb.secure_url} autoplay muted loop playsinline />
+            ) : thumb && (
+              <img src={thumb.secure_url} alt={project.cover?.title || `Project ${project.id}`} />
+            )}
+            <span class="project-label">
+              {caption.split('|').map((part) => (
+                <span class="project-label-line">{part.trim()}</span>
+              ))}
+            </span>
+          </a>
+        );
+      })}
     </div>
   </section>
 </Layout>
@@ -47,7 +69,8 @@ try {
     flex-direction: column;
   }
 
-  .project-card img {
+  .project-card img,
+  .project-card video {
     width: 100%;
     height: auto;
     display: block;

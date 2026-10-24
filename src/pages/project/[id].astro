@@ -2,89 +2,13 @@
 import Layout from '../../layouts/Layout.astro';
 import { fetchProjectMedia } from '../../lib/cloudinary';
 import type { CloudinaryMedia } from '../../lib/cloudinary';
+import { projectData } from '../../lib/projects';
 
 const { id = '' } = Astro.params;
 
 if (!/^[\w-]+$/.test(id)) {
   return new Response(null, { status: 404 });
 }
-
-// ─── PROJECT INFO ────────────────────────────────────────────────
-// Edit each project's details here. The key is the folder number (id).
-const projectData: Record<string, {
-  name: string;
-  client?: string;
-  collaborators?: string;
-  year?: string;
-  deliverables?: string;
-}> = {
-  '9': {
-    name: 'LOVE JAMES',
-    client: 'Love James',
-    collaborators: 'Photography by Katie Begbie\nModel: Ali Rodinciuc',
-    year: '2026',
-    deliverables: 'Art Direction',
-  },
-  '8': {
-    name: 'ACTIVIST',
-    client: 'Activist Mānuka Honey',
-    collaborators: 'Completed as designer at Seachange Studio\nDevelopment done by MADE Studio',
-    year: '2025',
-    deliverables: 'Website design\nEDM templates\nSocial media templates',
-  },
-  '7': {
-    name: 'WINNIE CATHERINE',
-    client: 'Winnie Catherine',
-    collaborators: 'Photography by Katie Begbie\nHMU by Josie Wignall\nModel: Sabrina Brunton',
-    year: '2026',
-    deliverables: 'Art Direction',
-  },
-  '6': {
-    name: 'PATINA X VILAR SECO',
-    client: 'Patina\nVilar Seco',
-    collaborators: 'Photography by Katie Begbie\nModel: Ali Rodinciuc',
-    year: '2026',
-    deliverables: 'Art Direction',
-  },
-  '5': {
-    name: 'TAPESTRY',
-    client: 'Tapestry\nA high-end property development\nin Wellington, NZ',
-    year: '2026',
-    deliverables: 'Brand Identity\nEditorial Design\nWebsite Design',
-  },
-  '4': {
-    name: 'HOTEL DES ARTISTES',
-    client: 'Hotel Des Artistes (Personal Project)',
-    year: 'WIP',
-    deliverables: 'Brand Identity\nPhotography',
-  },
-  '3': {
-    name: 'UNDERLENA X FRAME HOTEL',
-    client: 'Underlena\nFrame Hotel',
-    year: '2026',
-    deliverables: 'Art Direction\nGraphic Design',
-  },
-  '2': {
-    name: 'FURTHER READING',
-    client: 'Further Reading',
-    year: 'WIP',
-    deliverables: 'Brand Identity\nWebsite Design\nEditorial Design',
-  },
-  '1': {
-    name: 'MAYFAIR',
-    client: 'Mayfair by Forma Group\nA luxury property development\nin Wellington, NZ',
-    year: '2026',
-    deliverables: 'Brand Identity\nEditorial Design\nWebsite Design',
-  },
-  '0': {
-    name: 'LOVE JAMES',
-    client: 'Love James',
-    collaborators: 'Photography by Katie Begbie\nModel: Harper Sergeant',
-    year: '2026',
-    deliverables: 'Art Direction\nEditorial Design',
-  },
-};
-// ─────────────────────────────────────────────────────────────────
 
 let items: CloudinaryMedia[] = [];
 try {
@@ -100,15 +24,17 @@ if (items.length === 0) {
 const info = projectData[id];
 const cover = items.find((item) => item.resource_type === 'image') ?? items[0];
 const projectName = info?.name || cover.title.split('|')[0].trim() || id;
+const isHalfSize = (item: CloudinaryMedia) =>
+  info?.halfSize?.some((name) => item.public_id.includes(name)) ?? false;
 ---
 <Layout title={`${projectName} — Lily Savage`} projectName={projectName} projectInfo={info}>
   <section class="project">
     <div class="project-media">
       {items.map((item) => (
         item.resource_type === 'video' ? (
-          <video src={item.secure_url} autoplay muted loop playsinline />
+          <video src={item.secure_url} class:list={[{ half: isHalfSize(item) }]} autoplay muted loop playsinline />
         ) : (
-          <img src={item.secure_url} alt={item.title || projectName} />
+          <img src={item.secure_url} class:list={[{ half: isHalfSize(item) }]} alt={item.title || projectName} />
         )
       ))}
     </div>
@@ -136,6 +62,11 @@ const projectName = info?.name || cover.title.split('|')[0].trim() || id;
     height: auto;
     max-height: 90vh;
     width: auto;
+  }
+
+  .project-media .half {
+    max-width: 50%;
+    max-height: 45vh;
   }
 
   @media (max-width: 768px) {
