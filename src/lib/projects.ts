@@ -38,7 +38,6 @@ export const projectData: Record<string, ProjectInfo> = {
   '6': {
     name: 'PATINA X VILAR SECO',
     client: 'Patina\nVilar Seco',
-    collaborators: 'Photography by Katie Begbie\nModel: Ali Rodinciuc',
     year: '2026',
     deliverables: 'Art Direction\nPhotography',
   },
