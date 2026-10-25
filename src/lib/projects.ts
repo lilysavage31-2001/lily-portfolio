@@ -40,7 +40,7 @@ export const projectData: Record<string, ProjectInfo> = {
     client: 'Patina\nVilar Seco',
     collaborators: 'Photography by Katie Begbie\nModel: Ali Rodinciuc',
     year: '2026',
-    deliverables: 'Art Direction',
+    deliverables: 'Art Direction\nPhotography',
   },
   '5': {
     name: 'TAPESTRY',
