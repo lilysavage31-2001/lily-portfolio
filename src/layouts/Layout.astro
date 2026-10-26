@@ -5,8 +5,6 @@ interface ProjectInfo {
   collaborators?: string;
   year?: string;
   deliverables?: string;
-  brief?: string;
-  solution?: string;
 }
 
 interface Props {
@@ -15,9 +13,6 @@ interface Props {
   projectInfo?: ProjectInfo;
 }
 const { title = "Lily Savage", projectName, projectInfo } = Astro.props;
-// Every project page gets an info overlay, even without a projectData entry
-const info: Partial<ProjectInfo> = projectInfo ?? {};
-const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
 ---
 <!doctype html>
 <html lang="en">
@@ -28,10 +23,10 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     <title>{title}</title>
   </head>
   <body>
-    <nav class:list={[{ 'nav--project': projectName }]}>
+    <nav>
       <a href="/" class="nav-logo">Lily Savage</a>
       <div class="nav-center">
-        <a href="/projects" class:list={['nav-link', { 'nav-link--current': onProjects }]} id="nav-projects" aria-current={onProjects ? 'page' : undefined}>Projects</a>
+        <a href="/projects" class="nav-link" id="nav-projects">Projects</a>
         {projectName && (
           <>
             <span class="nav-project-name">{projectName}</span>
@@ -47,13 +42,14 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     </main>
 
     <footer>
-      {projectName ? (
-        <a href="/projects" class="nav-link">Back to all projects</a>
-      ) : (
-        <div class="footer-info">
-          <p>Lily is a <span class="nowrap">London-based</span> Graphic&nbsp;Designer and Art&nbsp;Director working across identity and visual storytelling. Her approach is rooted in simplicity, restraint and craft, building brand worlds with clarity, character and a sense of&nbsp;permanence.</p>
-        </div>
-      )}
+      <div class="footer-info">
+        <p>Lily Savage is a graphic designer / art director / stylist</p>
+        <p>Currently Based in New Zealand</p>
+      </div>
+      <div class="footer-links">
+        <a href="mailto:hello@lilysavage.com">Email</a>
+        <a href="https://instagram.com/lilysavage_" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </div>
     </footer>
 
     <div id="contact-overlay" class="contact-overlay">
@@ -61,7 +57,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
       <div class="contact-card">
         <div class="contact-item">
           <span class="contact-label">Email</span>
-          <a href="mailto:lilysavage31@gmail.com" class="contact-value">lilysavage31@gmail.com</a>
+          <a href="mailto:lily@lilysavage.co" class="contact-value">lily@lilysavage.co</a>
         </div>
         <div class="contact-item">
           <span class="contact-label">London</span>
@@ -71,54 +67,45 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
           <span class="contact-label">New Zealand</span>
           <span class="contact-value">+64 210 8184377</span>
         </div>
+        <div class="contact-item">
+          <span class="contact-label">Website</span>
+          <a href="https://lilysavage.co" class="contact-value">lilysavage.co</a>
+        </div>
         <div class="contact-based">
-          <span class="contact-value">From New Zealand.<br />Based in London.</span>
-          <span class="contact-value">Available for projects<br />anywhere in between.</span>
+          <span class="contact-value">Based in London,<br />Available world wide</span>
         </div>
       </div>
     </div>
 
-    {projectName && (
+    {projectInfo !== undefined && (
       <div id="info-overlay" class="info-overlay">
         <button class="info-close" id="info-close">Close</button>
         <div class="info-card">
-          {info.client && (
+          {projectInfo.client && (
             <div class="info-section">
               <span class="info-label">Client</span>
-              <span class="info-value info-value--pre">{info.client}</span>
+              <span class="info-value">{projectInfo.client}</span>
             </div>
           )}
-          {info.collaborators && (
+          {projectInfo.collaborators && (
             <div class="info-section">
               <span class="info-label">Collaborators</span>
-              <span class="info-value info-value--pre">{info.collaborators}</span>
+              <span class="info-value info-value--pre">{projectInfo.collaborators}</span>
             </div>
           )}
-          {info.year && (
+          {projectInfo.year && (
             <div class="info-section">
               <span class="info-label">Year</span>
-              <span class="info-value">{info.year}</span>
+              <span class="info-value">{projectInfo.year}</span>
             </div>
           )}
-          {info.deliverables && (
+          {projectInfo.deliverables && (
             <div class="info-section">
               <span class="info-label">Deliverables</span>
-              <span class="info-value info-value--pre">{info.deliverables}</span>
+              <span class="info-value">{projectInfo.deliverables}</span>
             </div>
           )}
-          {info.brief && (
-            <div class="info-section">
-              <span class="info-label">Brief</span>
-              <span class="info-value">{info.brief}</span>
-            </div>
-          )}
-          {info.solution && (
-            <div class="info-section">
-              <span class="info-label">Solution</span>
-              <span class="info-value">{info.solution}</span>
-            </div>
-          )}
-          {!info.client && !info.collaborators && !info.year && !info.deliverables && !info.brief && !info.solution && (
+          {!projectInfo.client && !projectInfo.collaborators && !projectInfo.year && !projectInfo.deliverables && (
             <p class="info-empty">No project information added yet.</p>
           )}
         </div>
@@ -229,8 +216,6 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
 
   main {
     flex: 1;
-    display: flex;
-    flex-direction: column;
   }
 
   a {
@@ -265,7 +250,6 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     color: #000;
     letter-spacing: 0.12px;
     text-decoration: none;
-    text-transform: uppercase;
   }
 
   .nav-center {
@@ -281,7 +265,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     font-style: italic;
     font-size: 12px;
     color: #000;
-    opacity: 0.43;
+    opacity: 0.33;
     letter-spacing: 0.36px;
     text-decoration: none;
     cursor: pointer;
@@ -292,12 +276,6 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
 
   .nav-link:hover {
     opacity: 1;
-  }
-
-  .nav-link--current {
-    opacity: 1;
-    pointer-events: none;
-    cursor: default;
   }
 
   .nav-project-name {
@@ -311,7 +289,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
   .nav-right {
     position: absolute;
     right: 20px;
-    opacity: 0.43;
+    opacity: 0.33;
   }
 
   .nav-right:hover {
@@ -335,21 +313,10 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
   }
 
   .footer-info p {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 400;
     letter-spacing: 0;
-    line-height: 1.1;
-    max-width: 40vw;
-    /* Balance line lengths and never leave a single word on the last line */
-    text-wrap: pretty;
-    hyphens: manual;
-    hanging-punctuation: first last;
-    font-kerning: normal;
-    text-rendering: optimizeLegibility;
-  }
-
-  .footer-info .nowrap {
-    white-space: nowrap;
+    line-height: 1.6;
   }
 
   .footer-links {
@@ -369,7 +336,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(250, 250, 250, 0.50);
+    background: rgba(250, 250, 250, 0.80);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 300;
@@ -407,7 +374,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     display: flex;
     flex-direction: column;
     gap: 0;
-    width: max-content;
+    width: 182px;
   }
 
   .contact-item {
@@ -447,11 +414,6 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
 
   .contact-based .contact-value {
     display: block;
-    line-height: 1;
-  }
-
-  .contact-based .contact-value + .contact-value {
-    margin-top: 1em;
   }
 
   /* ── INFO OVERLAY ── */
@@ -459,7 +421,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(250, 250, 250, 0.50);
+    background: rgba(250, 250, 250, 0.80);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 200;
@@ -527,7 +489,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     font-weight: 500;
     color: #000;
     letter-spacing: 0.01em;
-    line-height: 1.1;
+    line-height: 1.3;
   }
 
   .info-value--pre {
@@ -555,34 +517,8 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
       right: 16px;
     }
 
-    /* Project pages: logo and Contact on top, project links on a second row */
-    nav.nav--project {
-      height: auto;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      row-gap: 10px;
-      padding: 14px 16px;
-    }
-
-    nav.nav--project .nav-logo,
-    nav.nav--project .nav-right {
-      position: static;
-    }
-
-    nav.nav--project .nav-center {
-      order: 3;
-      width: 100%;
-      flex-wrap: wrap;
-      justify-content: center;
-      row-gap: 4px;
-    }
-
     footer {
       padding: 1rem 0.75rem;
-    }
-
-    .footer-info p {
-      max-width: none;
     }
   }
 </style>
