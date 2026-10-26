@@ -17,6 +17,7 @@ interface Props {
 const { title = "Lily Savage", projectName, projectInfo } = Astro.props;
 // Every project page gets an info overlay, even without a projectData entry
 const info: Partial<ProjectInfo> = projectInfo ?? {};
+const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
 ---
 <!doctype html>
 <html lang="en">
@@ -30,7 +31,7 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
     <nav class:list={[{ 'nav--project': projectName }]}>
       <a href="/" class="nav-logo">Lily Savage</a>
       <div class="nav-center">
-        <a href="/projects" class="nav-link" id="nav-projects">Projects</a>
+        <a href="/projects" class:list={['nav-link', { 'nav-link--current': onProjects }]} id="nav-projects" aria-current={onProjects ? 'page' : undefined}>Projects</a>
         {projectName && (
           <>
             <span class="nav-project-name">{projectName}</span>
@@ -291,6 +292,12 @@ const info: Partial<ProjectInfo> = projectInfo ?? {};
 
   .nav-link:hover {
     opacity: 1;
+  }
+
+  .nav-link--current {
+    opacity: 1;
+    pointer-events: none;
+    cursor: default;
   }
 
   .nav-project-name {
