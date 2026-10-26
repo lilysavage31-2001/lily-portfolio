@@ -39,7 +39,6 @@ export const projectData: Record<string, ProjectInfo> = {
     client: 'Tapestry\nA high-end property development in Wellington, NZ',
     year: '2026',
     deliverables: 'Brand Identity\nEditorial Design\nWebsite Design',
-    thumbnail: 'Tapestry_animation2',
     halfSize: ['Tapestry_animation2'],
   },
   '5': {
