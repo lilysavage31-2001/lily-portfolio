@@ -29,25 +29,25 @@ export const projectData: Record<string, ProjectInfo> = {
     deliverables: 'Website design\nEDM templates\nSocial media templates',
   },
   '7': {
-    name: 'WINNIE CATHERINE',
-    client: 'Winnie Catherine',
-    collaborators: 'Photography by Katie Begbie\nHMU by Josie Wignall\nModel: Sabrina Brunton',
-    year: '2026',
-    deliverables: 'Art Direction',
-  },
-  '6': {
     name: 'PATINA X VILAR SECO',
     client: 'Patina\nVilar Seco',
     year: '2026',
     deliverables: 'Art Direction\nPhotography',
   },
-  '5': {
+  '6': {
     name: 'TAPESTRY',
-    client: 'Tapestry\nA high-end property development\nin Wellington, NZ',
+    client: 'Tapestry\nA high-end property development in Wellington, NZ',
     year: '2026',
     deliverables: 'Brand Identity\nEditorial Design\nWebsite Design',
     thumbnail: 'Tapestry_animation2',
     halfSize: ['Tapestry_animation2'],
+  },
+  '5': {
+    name: 'WINNIE CATHERINE',
+    client: 'Winnie Catherine',
+    collaborators: 'Photography by Katie Begbie\nHMU by Josie Wignall\nModel: Sabrina Brunton',
+    year: '2026',
+    deliverables: 'Art Direction',
   },
   '4': {
     name: 'HOTEL DES ARTISTES',
@@ -69,7 +69,7 @@ export const projectData: Record<string, ProjectInfo> = {
   },
   '1': {
     name: 'MAYFAIR',
-    client: 'Mayfair by Forma Group\nA luxury property development\nin Wellington, NZ',
+    client: 'Mayfair by Forma Group\nA luxury property development in Wellington, NZ',
     year: '2026',
     deliverables: 'Brand Identity\nEditorial Design\nWebsite Design',
   },
