@@ -9,6 +9,8 @@ export interface ProjectInfo {
   collaborators?: string;
   year?: string;
   deliverables?: string;
+  brief?: string;
+  solution?: string;
   thumbnail?: string;
   halfSize?: string[];
 }
@@ -20,6 +22,7 @@ export const projectData: Record<string, ProjectInfo> = {
     collaborators: 'Photography by Katie Begbie\nModel: Ali Rodinciuc',
     year: '2026',
     deliverables: 'Art Direction',
+    solution: 'Love James is known for vintage bridal. The intention for this shoot was to showcase the dresses that belong beyond the wedding: at the after-party, or on women who aren’t brides.\n\nI treated the studio like a bedroom. Instead of the formality of a fitting, the space feels private and unhurried, a place to try things on the way you would at home: on the floor, across the sofa, half-dressed. Wide frames keep the room in the story, while soft natural light and a muted palette of blush, champagne and ivory make the dresses and the space feel like one wardrobe. The result is the feeling of visiting Love James itself: relaxed, intimate, yours to play in.',
   },
   '8': {
     name: 'ACTIVIST',
@@ -50,7 +53,7 @@ export const projectData: Record<string, ProjectInfo> = {
   },
   '4': {
     name: 'HOTEL DES ARTISTES',
-    client: 'Hotel Des Artistes (Personal Project)',
+    client: 'Hotel Des Artistes\n(Personal Project)',
     year: 'WIP',
     deliverables: 'Brand Identity\nPhotography',
   },
@@ -78,6 +81,7 @@ export const projectData: Record<string, ProjectInfo> = {
     collaborators: 'Photography by Katie Begbie\nModel: Harper Sergeant',
     year: '2026',
     deliverables: 'Art Direction\nEditorial Design',
+    solution: 'xxx',
   },
 };
 // ─────────────────────────────────────────────────────────────────

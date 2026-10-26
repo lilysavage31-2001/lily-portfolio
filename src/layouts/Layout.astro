@@ -109,13 +109,13 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
           {info.brief && (
             <div class="info-section">
               <span class="info-label">Brief</span>
-              <span class="info-value">{info.brief}</span>
+              <span class="info-value info-value--pre">{info.brief}</span>
             </div>
           )}
           {info.solution && (
             <div class="info-section">
               <span class="info-label">Solution</span>
-              <span class="info-value">{info.solution}</span>
+              <span class="info-value info-value--pre">{info.solution}</span>
             </div>
           )}
           {!info.client && !info.collaborators && !info.year && !info.deliverables && !info.brief && !info.solution && (
