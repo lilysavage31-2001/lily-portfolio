@@ -26,7 +26,7 @@ export const projectData: Record<string, ProjectInfo> = {
     solution: 'Love James is known for vintage bridal. The intention for this shoot was to showcase the dresses that belong beyond the wedding: at the after-party, or on women who aren’t brides.\n\nI treated the studio like a bedroom. Instead of the formality of a fitting, the space feels private and unhurried, a place to try things on the way you would at home: on the floor, across the sofa, half-dressed. Wide frames keep the room in the story, while soft natural light and a muted palette of blush, champagne and ivory make the dresses and the space feel like one wardrobe. The result is the feeling of visiting Love James itself: relaxed, intimate, yours to play in.',
   },
   '8': {
-    name: 'ACTIVIST',
+    name: 'ACTIVIST / GRAPHIC DESIGN',
     client: 'Activist Mānuka Honey',
     collaborators: 'Completed as designer at Seachange Studio\nDevelopment done by MADE Studio',
     year: '2025',
@@ -62,7 +62,7 @@ export const projectData: Record<string, ProjectInfo> = {
     client: 'Hotel Des Artistes\n(Personal Project)',
     year: '2026 WIP',
     deliverables: 'Brand Identity\nPhotography',
-    solution: 'The aim for this work in progress, is a mark that feels as though it has always been there, yet still reads as contemporary. Its shape borrows from old hotel stationery: an italic serif name above a stacked address, with a small date in a stamp-like frame. The modern feel comes from how it’s handled. It’s set black on cream with no colour and kept small, and on some pieces the type is turned on an angle. The patterned wallpaper, stripes and velvet supply all the richness, so the mark sits quietly within the interiors as part of the setting, much like a piece of stationary left on a chair.',
+    solution: 'The aim for this work in progress, is a mark that feels as though it has always been there, yet still reads as contemporary. Its shape borrows from old hotel stationery: an italic serif name above a stacked address, with a small date in a stamp-like frame. The modern feel comes from how it’s handled. It’s set black on cream with no colour and kept small, and on some pieces the type is turned on an angle. The patterned wallpaper, stripes and velvet supply all the richness, so the mark sits quietly within the interiors as part of the setting, much like a piece of stationery left on a chair.',
   },
   '3': {
     name: 'UNDERLENA X FRAME HOTEL',
@@ -76,7 +76,7 @@ export const projectData: Record<string, ProjectInfo> = {
     client: 'Further Reading',
     year: '2026 WIP',
     deliverables: 'Brand Identity\nWebsite Design\nEditorial Design',
-    solution: 'Further Reading is a work in progress project. The brand exists to provide new parents with resources, content and words of wisdom during their journey through parenthood. The brand needs to have a playful element, while remaining sophisticated and professional, retaing a trust-worthy precense. The brand communicates this through a custom hand-drawn child like font, paired with traditional serifs and Helvetica to tie back to childrens early learning material. ',
+    solution: 'Further Reading is a work in progress project. The brand exists to provide new parents with resources, content and words of wisdom during their journey through parenthood. The brand needs to have a playful element, while remaining sophisticated and professional, retaining a trustworthy presence. The brand communicates this through a custom hand-drawn child-like font, paired with traditional serifs and Helvetica to tie back to children’s early learning material. ',
   },
   '1': {
     name: 'MAYFAIR',
