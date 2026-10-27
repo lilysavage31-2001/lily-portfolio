@@ -11,6 +11,7 @@ export interface ProjectInfo {
   deliverables?: string;
   brief?: string;
   solution?: string;
+  recognition?: string;
   thumbnail?: string;
   halfSize?: string[];
 }

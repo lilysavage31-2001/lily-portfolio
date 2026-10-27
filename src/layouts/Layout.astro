@@ -7,6 +7,7 @@ interface ProjectInfo {
   deliverables?: string;
   brief?: string;
   solution?: string;
+  recognition?: string;
 }
 
 interface Props {
@@ -118,7 +119,13 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
               <span class="info-value info-value--pre" set:html={info.solution} />
             </div>
           )}
-          {!info.client && !info.collaborators && !info.year && !info.deliverables && !info.brief && !info.solution && (
+          {info.recognition && (
+            <div class="info-section">
+              <span class="info-label">Recognition</span>
+              <span class="info-value info-value--pre" set:html={info.recognition} />
+            </div>
+          )}
+          {!info.client && !info.collaborators && !info.year && !info.deliverables && !info.brief && !info.solution && !info.recognition && (
             <p class="info-empty">No project information added yet.</p>
           )}
         </div>
