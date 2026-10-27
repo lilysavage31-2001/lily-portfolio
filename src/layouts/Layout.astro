@@ -115,7 +115,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
           {info.solution && (
             <div class="info-section">
               <span class="info-label">Solution</span>
-              <span class="info-value info-value--pre">{info.solution}</span>
+              <span class="info-value info-value--pre" set:html={info.solution} />
             </div>
           )}
           {!info.client && !info.collaborators && !info.year && !info.deliverables && !info.brief && !info.solution && (
@@ -526,6 +526,15 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
 
   .info-value--pre {
     white-space: pre-line;
+  }
+
+  .info-value a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .info-value a:hover {
+    opacity: 0.5;
   }
 
   .info-empty {
