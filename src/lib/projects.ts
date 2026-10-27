@@ -30,7 +30,7 @@ export const projectData: Record<string, ProjectInfo> = {
     collaborators: 'Completed as designer at Seachange Studio\nDevelopment done by MADE Studio',
     year: '2025',
     deliverables: 'Website design\nEDM templates\nSocial media templates',
-    solution: 'We kept the Shopify website clean and minimal, only adding interactions and elements that felt aligned with their products, tone of voice and direction, while feeling elevated and contemporary.  Large editorial imagery leads, with minimal copy, so the texture of the honey and the ritual of using it do the selling. Images drift slowly and sections fade in on scroll, matching the brand’s invitation to slow down. Rounded frames with a blur on hover interaction echo the packaging. Navigation is grouped by benefit rather than product type, so honey, skincare and objects show up cohesively, as one routine. ',
+    solution: 'We kept the Shopify website clean and minimal, only adding interactions and elements that felt aligned with their products, tone of voice and direction, while feeling elevated and contemporary. Large editorial imagery leads, with minimal copy, so the texture of the honey and the ritual of using it do the selling. Images drift slowly and sections fade in on scroll, matching the brand’s invitation to slow down. Rounded frames with a blur on hover interaction echo the packaging. Navigation is grouped by benefit rather than product type, so honey, skincare and objects show up cohesively, as one routine.',
   },
   '7': {
     name: 'PATINA X VILAR SECO',
