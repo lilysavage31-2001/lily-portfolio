@@ -18,7 +18,7 @@ export interface ProjectInfo {
 
 export const projectData: Record<string, ProjectInfo> = {
   '9': {
-    name: 'LOVE JAMES',
+    name: 'LOVE JAMES / ART DIRECTION',
     client: 'Love James',
     collaborators: 'Photography by Katie Begbie\nModel: Ali Rodinciuc',
     year: '2026',
@@ -35,14 +35,14 @@ export const projectData: Record<string, ProjectInfo> = {
     recognition: '<a href="https://bestawards.co.nz/digital/e-commerce-websites/seachange/activist/" target="_blank" rel="noopener">Best Awards Bronze</a>',
   },
   '7': {
-    name: 'PATINA X VILAR SECO',
+    name: 'PATINA X VILAR SECO / SOCIAL CONTENT',
     client: 'Patina\nVilar Seco',
     year: '2026',
     deliverables: 'Art Direction\nPhotography',
     solution: 'Photography of the Patina lingerie sets in the setting of the Vilar Seco bedroom, I photographed the collection without a model, in the guest rooms of a winery in Portugal. Each piece is placed into the room: draped over a brass bedframe, laid across a floral bedspread, hung on a wooden chair so the garments feel personal, as if just taken off. Soft natural light and faded, warm tones give the images the quality of an old photograph, a natural fit for a brand called Patina. The red of the lingerie is the only saturated colour, so it holds the eye in every frame. The imagery was shot for use across social media, the website and email, giving the brand one consistent editorial look from first impression to purchase.',
   },
   '6': {
-    name: 'TAPESTRY',
+    name: 'TAPESTRY / GRAPHIC DESIGN',
     client: 'Tapestry\nA high-end property development in Wellington, NZ',
     year: '2026',
     deliverables: 'Brand Identity\nEditorial Design\nWebsite Design',
@@ -50,7 +50,7 @@ export const projectData: Record<string, ProjectInfo> = {
     halfSize: ['Tapestry_animation2'],
   },
   '5': {
-    name: 'WINNIE CATHERINE',
+    name: 'WINNIE CATHERINE / ART DIRECTION',
     client: 'Winnie Catherine',
     collaborators: 'Photography by Katie Begbie\nHMU by Josie Wignall\nModel: Sabrina Brunton',
     year: '2026',
@@ -58,35 +58,35 @@ export const projectData: Record<string, ProjectInfo> = {
     solution: 'Winnie Catherine’s garments are structured and strong, yet feminine and delicate. I built the shoot around that balance. The palette is limited to black, white and soft grey, so the focus stays on silhouette and form, letting each shape read clearly. Unexpected angles, from overhead and from behind, show the structure of the cut. Gentle, inward poses bring out the softness. Together they show both the garments and the feeling the brand wants its customer to have wearing them: composed, confident and quietly at ease.',
   },
   '4': {
-    name: 'HOTEL DES ARTISTES',
+    name: 'HOTEL DES ARTISTES / GRAPHIC DESIGN',
     client: 'Hotel Des Artistes\n(Personal Project)',
     year: '2026 WIP',
     deliverables: 'Brand Identity\nPhotography',
     solution: 'The aim for this work in progress, is a mark that feels as though it has always been there, yet still reads as contemporary. Its shape borrows from old hotel stationery: an italic serif name above a stacked address, with a small date in a stamp-like frame. The modern feel comes from how it’s handled. It’s set black on cream with no colour and kept small, and on some pieces the type is turned on an angle. The patterned wallpaper, stripes and velvet supply all the richness, so the mark sits quietly within the interiors as part of the setting, much like a piece of stationery left on a chair.',
   },
   '3': {
-    name: 'UNDERLENA X FRAME HOTEL',
+    name: 'UNDERLENA X FRAME HOTEL / SOCIAL CONTENT',
     client: 'Underlena\nFrame Hotel',
     year: '2026',
     deliverables: 'Art Direction\nGraphic Design',
     solution: 'A series of photographs taken for Frame Hotel in Austin, Texas. The series leans into the room’s late-90s character: aqua glass mosaic tiles, a frameless glass shower and a bath set into a tiled ledge. Rather than styling it into something new, I let the bathroom’s era lead. Underlena’s red pieces are draped over the bath edge and laid across the tiles as if just taken off.',
   },
   '2': {
-    name: 'FURTHER READING',
+    name: 'FURTHER READING / GRAPHIC DESIGN',
     client: 'Further Reading',
     year: '2026 WIP',
     deliverables: 'Brand Identity\nWebsite Design\nEditorial Design',
     solution: 'Further Reading is a work in progress project. The brand exists to provide new parents with resources, content and words of wisdom during their journey through parenthood. The brand needs to have a playful element, while remaining sophisticated and professional, retaining a trustworthy presence. The brand communicates this through a custom hand-drawn child-like font, paired with traditional serifs and Helvetica to tie back to children’s early learning material. ',
   },
   '1': {
-    name: 'MAYFAIR',
+    name: 'MAYFAIR / GRAPHIC DESIGN',
     client: 'Mayfair by Forma Group\nA luxury property development in Wellington, NZ',
     year: '2026',
     deliverables: 'Brand Identity\nEditorial Design\nWebsite Design',
     solution: 'The brand identity for Mayfair Mount Victoria is a refined and elegant visual system with a crafted logo and emblem. The design is rooted in the natural setting of Mount Victoria, with colours, imagery and the use of soft gradients that evoke calmness, sophistication, and wellness. Created to appeal to residents looking to downsize without compromising on style, comfort, or lifestyle quality.',
   },
   '0': {
-    name: 'LOVE JAMES',
+    name: 'LOVE JAMES / ART DIRECTION',
     client: 'Love James',
     collaborators: 'Photography by Katie Begbie\nModel: Harper Sergeant',
     year: '2026',
