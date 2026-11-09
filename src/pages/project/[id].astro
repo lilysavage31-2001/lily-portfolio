@@ -2,12 +2,19 @@
 import Layout from '../../layouts/Layout.astro';
 import { fetchProjectMedia } from '../../lib/cloudinary';
 import type { CloudinaryMedia } from '../../lib/cloudinary';
-import { projectData } from '../../lib/projects';
+import { projectData, projectSlug, projectIdFromSlug } from '../../lib/projects';
 
-const { id = '' } = Astro.params;
+const { id: param = '' } = Astro.params;
 
-if (!/^[\w-]+$/.test(id)) {
+if (!/^[\w-]+$/.test(param)) {
   return new Response(null, { status: 404 });
+}
+
+// URLs use the project slug; old folder-number links redirect to it
+const id = projectIdFromSlug(param) ?? param;
+const slug = projectSlug(id);
+if (slug !== param) {
+  return Astro.redirect(`/project/${slug}`, 301);
 }
 
 let items: CloudinaryMedia[] = [];

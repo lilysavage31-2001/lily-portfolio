@@ -95,3 +95,21 @@ export const projectData: Record<string, ProjectInfo> = {
   },
 };
 // ─────────────────────────────────────────────────────────────────
+
+// URL slug from the part of the name before the "/", e.g. "MCKIBBON’S / GRAPHIC DESIGN" → "mckibbons".
+// Projects without a projectData entry keep their folder number.
+export function projectSlug(id: string): string {
+  const name = projectData[id]?.name;
+  if (!name) return id;
+  const slug = name
+    .split('/')[0]
+    .toLowerCase()
+    .replace(/[’']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return slug || id;
+}
+
+export function projectIdFromSlug(slug: string): string | undefined {
+  return Object.keys(projectData).find((id) => projectSlug(id) === slug);
+}

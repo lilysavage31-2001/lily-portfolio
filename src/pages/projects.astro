@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { getProjectFolders, fetchProjectMedia } from '../lib/cloudinary';
 import type { ProjectFolder, CloudinaryMedia } from '../lib/cloudinary';
-import { projectData } from '../lib/projects';
+import { projectData, projectSlug } from '../lib/projects';
 
 let projects: ProjectFolder[] = [];
 try {
@@ -33,7 +33,7 @@ await Promise.all(
         const thumb = thumbnails.get(project.id) ?? project.cover;
         const caption = project.cover?.title || projectData[project.id]?.name || '';
         return (
-          <a href={`/project/${project.id}`} class="project-card">
+          <a href={`/project/${projectSlug(project.id)}`} class="project-card">
             {thumb?.resource_type === 'video' ? (
               <video src={thumb.secure_url} autoplay muted loop playsinline />
             ) : thumb && (
