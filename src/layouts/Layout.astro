@@ -1,4 +1,6 @@
 ---
+import AboutPanel from '../components/AboutPanel.astro';
+
 interface ProjectInfo {
   name: string;
   client?: string;
@@ -21,6 +23,8 @@ const { title = "Lily Savage", projectName, projectInfo, bare = false } = Astro.
 // Every project page gets an info overlay, even without a projectData entry
 const info: Partial<ProjectInfo> = projectInfo ?? {};
 const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
+// The header shows just the project, without the "/ CATEGORY" part of its name
+const navProjectName = projectName?.split('/')[0].trim();
 ---
 <!doctype html>
 <html lang="en">
@@ -35,10 +39,11 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     <nav class:list={[{ 'nav--project': projectName }]}>
       <a href="/" class="nav-logo">Lily Savage</a>
       <div class="nav-center">
+        <button class="nav-link nav-about" data-about-open>About,</button>
         <a href="/projects" class:list={['nav-link', { 'nav-link--current': onProjects }]} id="nav-projects" aria-current={onProjects ? 'page' : undefined}>Projects</a>
         {projectName && (
           <>
-            <span class="nav-project-name">{projectName}</span>
+            <span class="nav-project-name">{navProjectName}</span>
             <button class="nav-link nav-info-btn" id="nav-info-btn">Project Information +</button>
           </>
         )}
@@ -51,15 +56,9 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
       <slot />
     </main>
 
-    {!bare && (
+    {projectName && (
     <footer>
-      {projectName ? (
-        <a href="/projects" class="nav-link">Back to all projects</a>
-      ) : (
-        <div class="footer-info">
-          <p>Lily is a <span class="nowrap">London-based</span> Graphic&nbsp;Designer and Art&nbsp;Director working across identity and visual storytelling. Her approach is rooted in simplicity, restraint and craft, building brand worlds with clarity, character and a sense of&nbsp;permanence.</p>
-        </div>
-      )}
+      <a href="/projects" class="nav-link">Back to all projects</a>
     </footer>
     )}
 
@@ -84,6 +83,15 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
         </div>
       </div>
     </div>
+
+    {!bare && (
+      <div id="about-overlay" class="contact-overlay about-overlay">
+        <button class="contact-close" id="about-close">Close</button>
+        <div class="about-card">
+          <AboutPanel />
+        </div>
+      </div>
+    )}
 
     {projectName && (
       <div id="info-overlay" class="info-overlay">
@@ -159,6 +167,28 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
       });
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeContact();
+      });
+
+      // About overlay: same centred card and blur as Contact
+      const aboutOverlay = document.getElementById('about-overlay');
+      const aboutClose = document.getElementById('about-close');
+      function openAbout() {
+        aboutOverlay?.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeAbout() {
+        aboutOverlay?.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      document.querySelectorAll('[data-about-open]').forEach((btn) => {
+        btn.addEventListener('click', openAbout);
+      });
+      aboutClose?.addEventListener('click', closeAbout);
+      aboutOverlay?.addEventListener('click', (e) => {
+        if (e.target === aboutOverlay) closeAbout();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAbout();
       });
 
       // Info overlay
@@ -275,7 +305,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     left: 20px;
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 500;
     color: #000;
     letter-spacing: 0.12px;
     text-decoration: none;
@@ -283,6 +313,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
   }
 
   .nav-center {
+    position: relative;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -295,7 +326,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     font-style: italic;
     font-size: 12px;
     color: #000;
-    opacity: 0.43;
+    opacity: 0.33;
     letter-spacing: 0.36px;
     text-decoration: none;
     cursor: pointer;
@@ -308,6 +339,13 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     opacity: 1;
   }
 
+  /* Sits just left of Projects so the project group stays centred, as in the design */
+  .nav-about {
+    position: absolute;
+    right: calc(100% + 4px);
+    white-space: nowrap;
+  }
+
   .nav-link--current {
     opacity: 1;
     pointer-events: none;
@@ -317,7 +355,9 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
   .nav-project-name {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 500;
+    line-height: 1.1;
+    text-transform: uppercase;
     color: #000;
     letter-spacing: 0.12px;
   }
@@ -325,7 +365,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
   .nav-right {
     position: absolute;
     right: 20px;
-    opacity: 0.43;
+    opacity: 0.33;
   }
 
   .nav-right:hover {
@@ -340,30 +380,6 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     display: flex;
     flex-direction: column;
     gap: 2rem;
-  }
-
-  .footer-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .footer-info p {
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: 1.1;
-    max-width: 40vw;
-    /* Balance line lengths and never leave a single word on the last line */
-    text-wrap: pretty;
-    hyphens: manual;
-    hanging-punctuation: first last;
-    font-kerning: normal;
-    text-rendering: optimizeLegibility;
-  }
-
-  .footer-info .nowrap {
-    white-space: nowrap;
   }
 
   .footer-links {
@@ -466,6 +482,16 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
 
   .contact-based .contact-value + .contact-value {
     margin-top: 1em;
+  }
+
+  /* ── ABOUT OVERLAY ── */
+  .about-card {
+    background: #fff;
+    padding: 10px;
+    width: 752px;
+    max-width: calc(100% - 32px);
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
   }
 
   /* ── INFO OVERLAY ── */
@@ -587,6 +613,10 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
       position: static;
     }
 
+    .nav-about {
+      position: static;
+    }
+
     nav.nav--project .nav-center {
       order: 3;
       width: 100%;
@@ -597,10 +627,6 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
 
     footer {
       padding: 1rem 0.75rem;
-    }
-
-    .footer-info p {
-      max-width: none;
     }
   }
 </style>
