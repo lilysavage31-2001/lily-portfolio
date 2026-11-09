@@ -79,19 +79,18 @@ export const projectData: Record<string, ProjectInfo> = {
     solution: 'Further Reading is a work in progress project. The brand exists to provide new parents with resources, content and words of wisdom during their journey through parenthood. The brand needs to have a playful element, while remaining sophisticated and professional, retaining a trustworthy presence. The brand communicates this through a custom hand-drawn child-like font, paired with traditional serifs and Helvetica to tie back to children’s early learning material. ',
   },
   '1': {
-    name: 'MAYFAIR / GRAPHIC DESIGN',
-    client: 'Mayfair by Forma Group\nA luxury property development in Wellington, NZ',
-    year: '2026',
-    deliverables: 'Brand Identity\nEditorial Design\nWebsite Design',
-    solution: 'The brand identity for Mayfair Mount Victoria is a refined and elegant visual system with a crafted logo and emblem. The design is rooted in the natural setting of Mount Victoria, with colours, imagery and the use of soft gradients that evoke calmness, sophistication, and wellness. Created to appeal to residents looking to downsize without compromising on style, comfort, or lifestyle quality.',
+    name: 'SOUL CAPITAL / GRAPHIC DESIGN',
+    client: 'SOUL CAPITAL',
+    deliverables: 'Brand Identity',
+    solution: 'Soul Capital’s core brand idea is ‘Move when it matters’. This speaks to the company’s measured and deliberate care when it comes to investment decision making. The visual identity needs to answer the question ‘How can we communicate partnership, connected impact & cue the financial world?’\n\nTo illustrate Soul Capital’s grounded conviction and confidence, and representing growth in a non linear way, I used a simple horizon line graphic. The horizon line is the connective thread, it speaks to the notion of a long term view and expansive horizons of opportunity, in a non-linear or cliche way.',
   },
   '0': {
-    name: 'LOVE JAMES / ART DIRECTION',
-    client: 'Love James',
-    collaborators: 'Photography by Katie Begbie\nModel: Harper Sergeant',
+    name: 'MCKIBBON’S / GRAPHIC DESIGN',
+    client: 'McKibbon’s of Royalburn is a gourmet food store and deli celebrating premium, locally sourced produce.',
+    collaborators: 'Completed as designer at Seachange Studio',
     year: '2026',
     deliverables: 'Art Direction\nEditorial Design',
-    solution: 'A test shoot in the studio, styled with Love James jewellery. The photographs are printed and re-photographed to add a tactility element to the images.  ',
+    solution: 'I contributed to the development of the McKibbons brand by defining an illustration style and applying it to a full set for use in the supermarket internal signage and in marketing applications. I also defined the overall imagery art direction, conducting research and curating stock photography to align with the brand’s visual direction.\n\nAfter delivering the McKibbons brand to the client, they requested some story telling pieces that tie in the history of the McKibbon name. William McKibbon was a pioneering farmer. To illustrate this heritage, I developed and crafted a set of badges to be used in small applications throughout the brand. Illustrations created in Midjourney.',
   },
 };
 // ─────────────────────────────────────────────────────────────────
