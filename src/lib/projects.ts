@@ -39,7 +39,7 @@ export const projectData: Record<string, ProjectInfo> = {
     client: 'Patina\nVilar Seco',
     year: '2026',
     deliverables: 'Art Direction\nPhotography',
-    solution: 'Photography of the Patina lingerie sets in the setting of the Vilar Seco bedroom, I photographed the collection without a model, in the guest rooms of a winery in Portugal. Each piece is placed into the room: draped over a brass bedframe, laid across a floral bedspread, hung on a wooden chair so the garments feel personal, as if just taken off. Soft natural light and faded, warm tones give the images the quality of an old photograph, a natural fit for a brand called Patina. The red of the lingerie is the only saturated colour, so it holds the eye in every frame. The imagery was shot for use across social media, the website and email, giving the brand one consistent editorial look from first impression to purchase.',
+    solution: 'Photography of the Patina lingerie sets in the setting of the Vilar Seco bedroom, I photographed the collection without a model, in the guest rooms of a winery in Portugal. Each piece is placed into the room: draped over a brass bedframe, laid across a floral bedspread, hung on a wooden chair so the garments feel personal, as if just taken off. Soft natural light and faded, warm tones give the images the quality of an old photograph. The imagery was shot for use across social media, the website and email, giving the brand one consistent editorial look from first impression to purchase.',
   },
   '6': {
     name: 'TAPESTRY / GRAPHIC DESIGN',
