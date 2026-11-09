@@ -14,8 +14,10 @@ interface Props {
   title?: string;
   projectName?: string;
   projectInfo?: ProjectInfo;
+  // Full-bleed pages (home) render without the nav and footer
+  bare?: boolean;
 }
-const { title = "Lily Savage", projectName, projectInfo } = Astro.props;
+const { title = "Lily Savage", projectName, projectInfo, bare = false } = Astro.props;
 // Every project page gets an info overlay, even without a projectData entry
 const info: Partial<ProjectInfo> = projectInfo ?? {};
 const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
@@ -29,6 +31,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
     <title>{title}</title>
   </head>
   <body>
+    {!bare && (
     <nav class:list={[{ 'nav--project': projectName }]}>
       <a href="/" class="nav-logo">Lily Savage</a>
       <div class="nav-center">
@@ -40,13 +43,15 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
           </>
         )}
       </div>
-      <button class="nav-link nav-right" id="nav-contact-btn">Contact</button>
+      <button class="nav-link nav-right" data-contact-open>Contact</button>
     </nav>
+    )}
 
     <main>
       <slot />
     </main>
 
+    {!bare && (
     <footer>
       {projectName ? (
         <a href="/projects" class="nav-link">Back to all projects</a>
@@ -56,6 +61,7 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
         </div>
       )}
     </footer>
+    )}
 
     <div id="contact-overlay" class="contact-overlay">
       <button class="contact-close" id="contact-close">Close</button>
@@ -134,7 +140,6 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
 
     <script>
       // Contact overlay
-      const contactBtn = document.getElementById('nav-contact-btn');
       const contactOverlay = document.getElementById('contact-overlay');
       const contactClose = document.getElementById('contact-close');
       function openContact() {
@@ -145,7 +150,9 @@ const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
         contactOverlay?.classList.remove('open');
         document.body.style.overflow = '';
       }
-      contactBtn?.addEventListener('click', openContact);
+      document.querySelectorAll('[data-contact-open]').forEach((btn) => {
+        btn.addEventListener('click', openContact);
+      });
       contactClose?.addEventListener('click', closeContact);
       contactOverlay?.addEventListener('click', (e) => {
         if (e.target === contactOverlay) closeContact();
