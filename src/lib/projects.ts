@@ -89,7 +89,7 @@ export const projectData: Record<string, ProjectInfo> = {
     name: 'MCKIBBON’S / GRAPHIC DESIGN',
     client: 'McKibbon’s of Royalburn is a gourmet food store and deli celebrating premium, locally sourced produce.',
     collaborators: 'Completed as designer at Seachange Studio',
-    year: '2026',
+    year: '2025',
     deliverables: 'Brand Identity\nIllustration',
     solution: 'I contributed to the development of the McKibbons brand by defining an illustration style and applying it to a full set for use in the supermarket internal signage and in marketing applications. I also defined the overall imagery art direction, conducting research and curating stock photography to align with the brand’s visual direction.\n\nAfter delivering the McKibbons brand to the client, they requested some story telling pieces that tie in the history of the McKibbon name. William McKibbon was a pioneering farmer. To illustrate this heritage, I developed and crafted a set of badges to be used in small applications throughout the brand. Illustrations created in Midjourney.',
   },
