@@ -27,7 +27,9 @@ const panels = [
               alt=""
               widths={[720, 1080, 1440, 2160]}
               sizes="(max-width: 768px) 100vw, 50vw"
-              loading={i === 0 ? 'eager' : 'lazy'}
+              quality={75}
+              loading="eager"
+              fetchpriority={i === 0 ? 'high' : 'low'}
               class={i === 0 ? 'is-active' : undefined}
             />
           ))}
@@ -71,19 +73,34 @@ const panels = [
 </Layout>
 
 <script>
-  // Hovering a half shows its next image; touch screens advance on tap instead
+  // Hovering a half shows its next image; touch screens advance on tap instead.
+  // The first hover on each half is ignored, so the opening images don't change the moment the cursor lands.
   document.querySelectorAll<HTMLElement>('[data-cycle]').forEach((panel) => {
-    const images = panel.querySelectorAll('img');
+    const images = [...panel.querySelectorAll('img')];
     if (images.length < 2) return;
+    // Decode every image up front so swapping never shows a half-loaded frame
+    const ready = images.map((img) => img.decode().catch(() => {}));
     let index = 0;
+    let hovered = false;
     let pointerType = 'mouse';
-    const next = () => {
+    let switching = false;
+    const next = async () => {
+      if (switching) return;
+      switching = true;
+      const target = (index + 1) % images.length;
+      await ready[target];
       images[index].classList.remove('is-active');
-      index = (index + 1) % images.length;
-      images[index].classList.add('is-active');
+      images[target].classList.add('is-active');
+      index = target;
+      switching = false;
     };
     panel.addEventListener('pointerenter', (e) => {
-      if (e.pointerType === 'mouse') next();
+      if (e.pointerType !== 'mouse') return;
+      if (!hovered) {
+        hovered = true;
+        return;
+      }
+      next();
     });
     panel.addEventListener('pointerdown', (e) => {
       pointerType = e.pointerType;
