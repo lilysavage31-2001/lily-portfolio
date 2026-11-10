@@ -3,27 +3,34 @@ import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import AboutPanel from '../components/AboutPanel.astro';
 
-// Background images live in src/assets/home; the first two by filename fill the left and right halves
-const homeImages = Object.entries(
-  import.meta.glob<{ default: ImageMetadata }>('../assets/home/*.{jpg,jpeg,png,webp,avif}', { eager: true })
-)
-  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-  .map(([, mod]) => mod.default);
+// Each half cycles through the images in its folder (src/assets/home/Left and Right), in filename order.
+// Hovering a half shows its next image; on touch screens a tap does.
+type ImageGlob = Record<string, { default: ImageMetadata }>;
+const inOrder = (glob: ImageGlob) =>
+  Object.entries(glob)
+    .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+    .map(([, mod]) => mod.default);
 
-const panels = homeImages.slice(0, 2);
+const panels = [
+  inOrder(import.meta.glob('../assets/home/Left/*.{jpg,jpeg,png,webp,avif}', { eager: true })),
+  inOrder(import.meta.glob('../assets/home/Right/*.{jpg,jpeg,png,webp,avif}', { eager: true })),
+];
 ---
 <Layout title="Lily Savage" bare>
   <section class="hero">
     <div class="hero-panels">
-      {panels.map((image) => (
-        <div class="hero-panel">
-          <Image
-            src={image}
-            alt=""
-            widths={[720, 1080, 1440, 2160]}
-            sizes="(max-width: 768px) 100vw, 50vw"
-            loading="eager"
-          />
+      {panels.map((images) => (
+        <div class="hero-panel" data-cycle>
+          {images.map((image, i) => (
+            <Image
+              src={image}
+              alt=""
+              widths={[720, 1080, 1440, 2160]}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              class={i === 0 ? 'is-active' : undefined}
+            />
+          ))}
         </div>
       ))}
     </div>
@@ -64,6 +71,28 @@ const panels = homeImages.slice(0, 2);
 </Layout>
 
 <script>
+  // Hovering a half shows its next image; touch screens advance on tap instead
+  document.querySelectorAll<HTMLElement>('[data-cycle]').forEach((panel) => {
+    const images = panel.querySelectorAll('img');
+    if (images.length < 2) return;
+    let index = 0;
+    let pointerType = 'mouse';
+    const next = () => {
+      images[index].classList.remove('is-active');
+      index = (index + 1) % images.length;
+      images[index].classList.add('is-active');
+    };
+    panel.addEventListener('pointerenter', (e) => {
+      if (e.pointerType === 'mouse') next();
+    });
+    panel.addEventListener('pointerdown', (e) => {
+      pointerType = e.pointerType;
+    });
+    panel.addEventListener('click', () => {
+      if (pointerType !== 'mouse') next();
+    });
+  });
+
   // About and Contact swap the card content in place and blur the images behind it
   type View = 'intro' | 'about' | 'contact';
   const card = document.getElementById('intro-card');
@@ -120,17 +149,26 @@ const panels = homeImages.slice(0, 2);
   }
 
   .hero-panel {
+    position: relative;
     flex: 1 1 0;
     min-width: 0;
     overflow: hidden;
   }
 
+  /* Images stack in each half; only the active one shows */
   .hero-panel img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     max-width: none;
     object-fit: cover;
     display: block;
+    opacity: 0;
+  }
+
+  .hero-panel img.is-active {
+    opacity: 1;
   }
 
   .hero-blur {
