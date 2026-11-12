@@ -2,7 +2,6 @@
 // About content shared by the home card's About view and the About overlay on other pages
 import type { HTMLAttributes } from 'astro/types';
 import { Image } from 'astro:assets';
-import portraitBase from '../assets/about/portrait-base.png';
 import portrait from '../assets/about/portrait.jpg';
 
 type Props = HTMLAttributes<'div'>;
@@ -33,9 +32,9 @@ const attrs = Astro.props;
   </div>
 
   <div class="about-portrait">
-    <Image src={portraitBase} alt="" widths={[170, 340]} sizes="170px" class="about-portrait-base" />
     <div class="about-portrait-crop">
-      <Image src={portrait} alt="Portrait of Lily Savage" widths={[248, 496]} sizes="248px" />
+      <!-- Loads with the page (the panel starts hidden) so opening About never waits on it -->
+      <Image src={portrait} alt="Portrait of Lily Savage" widths={[248, 496]} sizes="248px" loading="eager" decoding="sync" />
     </div>
   </div>
 </div>
@@ -96,13 +95,6 @@ const attrs = Astro.props;
     position: absolute;
     max-width: none;
     display: block;
-  }
-
-  .about-portrait-base {
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 
   .about-portrait-crop {
