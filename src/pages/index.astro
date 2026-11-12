@@ -351,6 +351,8 @@ const sizesFor = (image: ImageMetadata) => {
     font-size: 9px;
     line-height: 1;
     letter-spacing: 0.08em;
+    /* Helvetica Neue jumps from medium to bold, so a hairline stroke adds a touch more weight */
+    -webkit-text-stroke: 0.2px currentColor;
     text-transform: uppercase;
     white-space: nowrap;
     border: none;
