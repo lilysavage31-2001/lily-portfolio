@@ -8,11 +8,24 @@ import AboutPanel from '../components/AboutPanel.astro';
 // Set to true to turn the image cycling back on. While false, each half shows only its first image.
 const CYCLE_IMAGES = false;
 
+// Shift an image's crop, keyed by folder/filename without extension.
+// Negative x moves the visible area right (shows more of the image's right side); positive moves it left.
+const cropShift: Record<string, { x?: number; y?: number }> = {
+  'Left/1': { x: -60 },
+};
+
 type ImageGlob = Record<string, { default: ImageMetadata }>;
 const inOrder = (glob: ImageGlob) =>
   Object.entries(glob)
     .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-    .map(([, mod]) => mod.default);
+    .map(([path, mod]) => {
+      const key = path.split('/').slice(-2).join('/').replace(/\.[^.]+$/, '');
+      const { x = 0, y = 0 } = cropShift[key] ?? {};
+      return {
+        image: mod.default,
+        position: x || y ? `calc(50% + ${x}px) calc(50% + ${y}px)` : undefined,
+      };
+    });
 
 const panels = [
   inOrder(import.meta.glob('../assets/home/Left/*.{jpg,jpeg,png,webp,avif}', { eager: true })),
@@ -32,12 +45,13 @@ const sizesFor = (image: ImageMetadata) => {
     <div class="hero-panels">
       {panels.map((images) => (
         <div class="hero-panel" data-cycle>
-          {images.map((image, i) => (
+          {images.map(({ image, position }, i) => (
             <Image
               src={image}
               alt=""
               widths={[720, 1080, 1440, 2160, 2880, 3840]}
               sizes={sizesFor(image)}
+              style={position ? `object-position: ${position}` : undefined}
               quality={90}
               loading="eager"
               fetchpriority={i === 0 ? 'high' : 'low'}
