@@ -5,6 +5,9 @@ import AboutPanel from '../components/AboutPanel.astro';
 
 // Each half cycles through the images in its folder (src/assets/home/Left and Right), in filename order.
 // Hovering a half shows its next image; on touch screens a tap does.
+// Set to true to turn the image cycling back on. While false, each half shows only its first image.
+const CYCLE_IMAGES = false;
+
 type ImageGlob = Record<string, { default: ImageMetadata }>;
 const inOrder = (glob: ImageGlob) =>
   Object.entries(glob)
@@ -14,7 +17,7 @@ const inOrder = (glob: ImageGlob) =>
 const panels = [
   inOrder(import.meta.glob('../assets/home/Left/*.{jpg,jpeg,png,webp,avif}', { eager: true })),
   inOrder(import.meta.glob('../assets/home/Right/*.{jpg,jpeg,png,webp,avif}', { eager: true })),
-];
+].map((images) => (CYCLE_IMAGES ? images : images.slice(0, 1)));
 ---
 <Layout title="Lily Savage" bare>
   <section class="hero">
