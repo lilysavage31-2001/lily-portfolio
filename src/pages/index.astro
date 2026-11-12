@@ -18,6 +18,14 @@ const panels = [
   inOrder(import.meta.glob('../assets/home/Left/*.{jpg,jpeg,png,webp,avif}', { eager: true })),
   inOrder(import.meta.glob('../assets/home/Right/*.{jpg,jpeg,png,webp,avif}', { eager: true })),
 ].map((images) => (CYCLE_IMAGES ? images : images.slice(0, 1)));
+
+// Images cover their half, so a wide image is shown wider than the half itself.
+// Tell the browser the real displayed width so it picks a sharp enough file.
+// Desktop halves are 50vw × 100vh; on phones they stack at 100vw × 50vh.
+const sizesFor = (image: ImageMetadata) => {
+  const aspect = (image.width / image.height).toFixed(3);
+  return `(max-width: 768px) max(100vw, calc(50vh * ${aspect})), max(50vw, calc(100vh * ${aspect}))`;
+};
 ---
 <Layout title="Lily Savage" bare>
   <section class="hero">
@@ -28,9 +36,9 @@ const panels = [
             <Image
               src={image}
               alt=""
-              widths={[720, 1080, 1440, 2160]}
-              sizes="(max-width: 768px) 100vw, 50vw"
-              quality={75}
+              widths={[720, 1080, 1440, 2160, 2880, 3840]}
+              sizes={sizesFor(image)}
+              quality={90}
               loading="eager"
               fetchpriority={i === 0 ? 'high' : 'low'}
               class={i === 0 ? 'is-active' : undefined}
