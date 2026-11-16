@@ -4,9 +4,9 @@ import Layout from '../layouts/Layout.astro';
 import AboutPanel from '../components/AboutPanel.astro';
 
 // Each half cycles through the images in its folder (src/assets/home/Left and Right), in filename order.
-// Hovering a half shows its next image; on touch screens a tap does.
-// Set to true to turn the image cycling back on. While false, each half shows only its first image.
-const CYCLE_IMAGES = false;
+// Clicking the left half steps back through its images, clicking the right half steps forward.
+// Set to false to turn the image cycling off. While false, each half shows only its first image.
+const CYCLE_IMAGES = true;
 
 // Shift an image's crop, keyed by folder/filename without extension.
 // Negative x moves the visible area right (shows more of the image's right side); positive moves it left.
@@ -98,40 +98,25 @@ const sizesFor = (image: ImageMetadata) => {
 </Layout>
 
 <script>
-  // Hovering a half shows its next image; touch screens advance on tap instead.
-  // The first hover on each half is ignored, so the opening images don't change the moment the cursor lands.
-  document.querySelectorAll<HTMLElement>('[data-cycle]').forEach((panel) => {
+  // Clicking a half changes its image: the left half steps back, the right half steps forward.
+  document.querySelectorAll<HTMLElement>('[data-cycle]').forEach((panel, panelIndex) => {
     const images = [...panel.querySelectorAll('img')];
     if (images.length < 2) return;
+    panel.classList.add('is-cycling');
+    const step = panelIndex === 0 ? -1 : 1;
     // Decode every image up front so swapping never shows a half-loaded frame
     const ready = images.map((img) => img.decode().catch(() => {}));
     let index = 0;
-    let hovered = false;
-    let pointerType = 'mouse';
     let switching = false;
-    const next = async () => {
+    panel.addEventListener('click', async () => {
       if (switching) return;
       switching = true;
-      const target = (index + 1) % images.length;
+      const target = (index + step + images.length) % images.length;
       await ready[target];
       images[index].classList.remove('is-active');
       images[target].classList.add('is-active');
       index = target;
       switching = false;
-    };
-    panel.addEventListener('pointerenter', (e) => {
-      if (e.pointerType !== 'mouse') return;
-      if (!hovered) {
-        hovered = true;
-        return;
-      }
-      next();
-    });
-    panel.addEventListener('pointerdown', (e) => {
-      pointerType = e.pointerType;
-    });
-    panel.addEventListener('click', () => {
-      if (pointerType !== 'mouse') next();
     });
   });
 
@@ -211,6 +196,15 @@ const sizesFor = (image: ImageMetadata) => {
 
   .hero-panel img.is-active {
     opacity: 1;
+  }
+
+  /* Arrow cursors show which way each half steps; black, no outline */
+  .hero-panel.is-cycling:first-child {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M25 16H7M14 9l-7 7 7 7' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E") 16 16, w-resize;
+  }
+
+  .hero-panel.is-cycling:last-child {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 16h18M18 9l7 7-7 7' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E") 16 16, e-resize;
   }
 
   .hero-blur {
