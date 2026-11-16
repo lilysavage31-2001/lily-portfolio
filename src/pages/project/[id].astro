@@ -34,7 +34,7 @@ const projectName = info?.name || cover.title.split('|')[0].trim() || id;
 const isHalfSize = (item: CloudinaryMedia) =>
   info?.halfSize?.some((name) => item.public_id.includes(name)) ?? false;
 ---
-<Layout title={`${projectName} — Lily Savage`} projectName={projectName} projectInfo={info}>
+<Layout title={`${projectName} — Lily Savage`} projectName={projectName} projectInfo={info} noindex>
   <section class="project">
     <div class="project-media">
       {items.map((item) => (

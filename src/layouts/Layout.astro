@@ -18,8 +18,10 @@ interface Props {
   projectInfo?: ProjectInfo;
   // Full-bleed pages (home) render without the nav and footer
   bare?: boolean;
+  // Keep the page out of search results (used while projects are shared by direct link only)
+  noindex?: boolean;
 }
-const { title = "Lily Savage", projectName, projectInfo, bare = false } = Astro.props;
+const { title = "Lily Savage", projectName, projectInfo, bare = false, noindex = false } = Astro.props;
 // Every project page gets an info overlay, even without a projectData entry
 const info: Partial<ProjectInfo> = projectInfo ?? {};
 const onProjects = Astro.url.pathname.replace(/\/$/, '') === '/projects';
@@ -33,6 +35,7 @@ const navProjectName = projectName?.split('/')[0].trim();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <title>{title}</title>
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
   </head>
   <body>
     {!bare && (
